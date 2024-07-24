@@ -1,0 +1,125 @@
+CREATE TABLE Category (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  maximumLoad TINYINT NOT NULL,
+  active BOOLEAN DEFAULT TRUE,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+DELIMITER $$
+CREATE PROCEDURE CreateCategory(IN name VARCHAR(255), IN maximumLoad TINYINT)
+BEGIN
+  INSERT INTO Category (name, maximumLoad) VALUES (name, maximumLoad)
+END
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE ReadActiveCategories()
+BEGIN
+  SELECT id, name, maximumLoad FROM Category WHERE active = TRUE SORT BY name
+END
+DELIMITER ;
+
+CREATE TABLE Activity (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  category BIGINT NOT NULL,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  maximumLoad TINYINT NOT NULL,
+  observation VARCHAR(255),
+  documentType VARCHAR(255),
+  active BOOLEAN DEFAULT TRUE,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (category) REFERENCES Category (id)
+);
+
+CREATE TABLE Course (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  additionalHours TINYINT NOT NULL,
+  active BOOLEAN DEFAULT TRUE,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE CourseActivity (
+  course BIGINT,
+  activity BIGINT,
+  FOREIGN KEY(course) REFERENCES Category (id),
+  FOREIGN KEY(activity) REFERENCES Activity (id),
+  PRIMARY KEY(course, activity)
+);
+
+CREATE TABLE Evaluator (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE CourseActivityEvaluator (
+  course BIGINT,
+  evaluator BIGINT,
+  FOREIGN KEY (course) REFERENCES Course (id),
+  FOREIGN KEY (evaluator) REFERENCES Evaluator (id),
+  PRIMARY KEY (course, evaluator)
+);
+
+CREATE TABLE Registration (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  course BIGINT NOT NULL,
+  active BOOLEAN DEFAULT TRUE,
+  FOREIGN KEY (course) REFERENCES Course (id)
+);
+
+CREATE TABLE Student (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE student_registration (
+  student BIGINT,
+  registration BIGINT,
+  FOREIGN KEY (student) REFERENCES Course (id),
+  FOREIGN KEY (registration) REFERENCES Registration (id),
+  PRIMARY KEY (student, registration)
+);
+
+CREATE TABLE Submitted (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  activity BIGINT,
+  registration BIGINT,
+  status ENUM('DRAFT', 'WAITING', 'EXPIRED', 'APPROVED', 'REPROVED') DEFAULT 'DRAFT',
+  attached VARCHAR(255) NOT NULL,
+  workload TINYINT NOT NULL,
+  observation VARCHAR(255) DEFAULT 'Sem observações',
+  commentary VARCHAR(255) NOT NULL,
+  curriculumLink BOOLEAN NOT NULL,
+  attempts TINYINT DEFAULT 0,
+  submitedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  expiresAt TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (activity) REFERENCES Activity (id),
+  FOREIGN KEY (registration) REFERENCES Registration (id)
+);
+
+DELIMITER //
+
+CREATE TRIGGER set_expiresAt
+BEFORE INSERT ON Activity
+FOR EACH ROW
+BEGIN
+  SET NEW.expiresAt = DATE_ADD(NEW.submittedAt, INTERVAL 30 DAY);
+END //
+
+DELIMITER ;
+
+
+CREATE TABLE activity_evaluator (
+  submitted BIGINT,
+  evaluator BIGINT,
+  FOREIGN KEY (submitted) REFERENCES Submitted (id),
+  FOREIGN KEY (evaluator) REFERENCES Evaluator (id),
+  PRIMARY KEY (submitted, evaluator)
+);
