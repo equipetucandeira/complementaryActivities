@@ -12,9 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class SwingUI {
+public final class SwingUI {
 	public static JFrame getJFrame(String title, String icon, LayoutManager layout, Dimension dimension, Color background) {
 		var component = new JFrame(title);
 
@@ -79,6 +80,22 @@ public class SwingUI {
 		return component;
 	}
 
+	public static JPasswordField getJPasswordField(Rectangle bounds, Font font, Color foreground, Color background) {
+		var component = new JPasswordField();
+
+		component.setBounds(bounds);
+
+		component.setFont(font);
+
+		component.setForeground(foreground);
+
+		component.setBackground(background);
+
+		component.setBorder(BorderFactory.createEmptyBorder());
+
+		return component;
+	}
+
 	public static JButton getJButton(String text, Rectangle bounds, Font font, Color foreground, Color background) {
 		var component = new JButton();
 
@@ -101,5 +118,11 @@ public class SwingUI {
 		component.setFocusable(false);
 
 		return component;
+	}
+
+	public static Color getColor(String hexadecimal) {
+		var decode = Color.decode(hexadecimal);
+
+		return new Color(decode.getRed(), decode.getGreen(), decode.getBlue());
 	}
 }
