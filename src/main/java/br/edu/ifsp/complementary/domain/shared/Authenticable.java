@@ -1,5 +1,7 @@
 package br.edu.ifsp.complementary.domain.shared;
 
+import java.util.Objects;
+
 public abstract class Authenticable {
 	private Email email;
 
@@ -19,5 +21,25 @@ public abstract class Authenticable {
 
 	public void setPassword(Password password) {
 		this.password = password;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+
+		var casting = (Authenticable) object;
+
+		return getEmail().equals(casting.getEmail()) && getPassword().equals(casting.getPassword());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getEmail(), getPassword());
 	}
 };
