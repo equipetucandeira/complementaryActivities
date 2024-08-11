@@ -18,6 +18,14 @@ public final class App {
 				try {
 					var configuration = new Configuration("application.properties");
 
+					try {
+						Class.forName("db.driver");
+					} catch (ClassNotFoundException exception) {
+						JOptionPane.showMessageDialog(null, "Driver " + configuration.getProperty("db.driver") + " não encontrado.", configuration.getProperty("app.window.title"), JOptionPane.ERROR_MESSAGE);
+
+						return;
+					}
+
 					var frame = SwingUI.getJFrame(
 						configuration.getProperty("app.window.title"),
 						configuration.getProperty("app.window.icon"),
