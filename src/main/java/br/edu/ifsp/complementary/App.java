@@ -1,11 +1,13 @@
 package br.edu.ifsp.complementary;
 
 import br.edu.ifsp.complementary.infrastructure.Configuration;
+import br.edu.ifsp.complementary.infrastructure.ConfigurationException;
 import br.edu.ifsp.complementary.ui.SwingUI;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public final class App {
@@ -28,8 +30,8 @@ public final class App {
 					);
 
 					frame.setVisible(true);
-				} catch (Exception exception) {
-					exception.printStackTrace();
+				} catch (ConfigurationException exception) {
+					JOptionPane.showMessageDialog(null, exception.getMessage(), "App", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
