@@ -11,6 +11,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public final class App {
+	private static String title;
+
+	private static Dimension dimensions;
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -18,30 +22,38 @@ public final class App {
 				try {
 					var configuration = new Configuration("application.properties");
 
+					App.title = configuration.getProperty("app.window.title");
+
+					App.dimensions = new Dimension(
+						Integer.valueOf(configuration.getProperty("app.window.width")),
+						Integer.valueOf(configuration.getProperty("app.window.height"))
+					);
+
 					try {
 						Class.forName("db.driver");
 					} catch (ClassNotFoundException exception) {
-						JOptionPane.showMessageDialog(null, "Driver " + configuration.getProperty("db.driver") + " não encontrado.", configuration.getProperty("app.window.title"), JOptionPane.ERROR_MESSAGE);
+						showErrorMessage("Driver " + configuration.getProperty("db.driver") + " não encontrado.");
 
 						return;
 					}
 
 					var frame = SwingUI.getJFrame(
-						configuration.getProperty("app.window.title"),
+						App.title,
 						configuration.getProperty("app.window.icon"),
 						null,
-						new Dimension(
-							Integer.valueOf(configuration.getProperty("app.window.width")),
-							Integer.valueOf(configuration.getProperty("app.window.height"))
-						),
+						App.dimensions,
 						SwingUI.getColor(configuration.getProperty("app.theme.primary"))
 					);
 
 					frame.setVisible(true);
 				} catch (ConfigurationException exception) {
-					JOptionPane.showMessageDialog(null, exception.getMessage(), "App", JOptionPane.ERROR_MESSAGE);
+					showErrorMessage(exception.getMessage());
 				}
 			}
 		});
+	}
+
+	private static void showErrorMessage(String message) {
+		JOptionPane.showMessageDialog(null, message, App.title, JOptionPane.ERROR_MESSAGE);
 	}
 }
