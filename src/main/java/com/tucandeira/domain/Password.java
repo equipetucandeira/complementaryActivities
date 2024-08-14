@@ -24,7 +24,7 @@ public final class Password {
 
   @Override
   public boolean equals(Object object) {
-    return getClass() == object.getClass() || hashCode() == object.hashCode();
+    return hashCode() == object.hashCode();
   }
 
   @Override
