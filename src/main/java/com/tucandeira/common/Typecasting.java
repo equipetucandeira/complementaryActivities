@@ -1,5 +1,5 @@
 package com.tucandeira.common;
 
 public interface Typecasting<T,U> {
-  U cast(T object);
+  U cast(T object) throws Exception;
 }
