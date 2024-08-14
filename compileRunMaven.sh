@@ -11,10 +11,6 @@ if [ ! -d "target/classes" ]; then
   exit 1
 fi
 
-mv target/classes/application.properties target/classes/com/tucandeira/
-
-mv target/classes/app.png target/classes/com/tucandeira/ui
-
 echo "Executing a maven application..."
 
 mvn exec:java -Dexec.mainClass="com.tucandeira.App"
