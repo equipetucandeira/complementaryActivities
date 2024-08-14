@@ -23,14 +23,18 @@ public final class Student implements Serializable {
     this.name = name;
 
     this.email = email;
+
+    this.password = password;
   }
 
-  public Student(UUID id, String name, Email email, Password password) {
-    this.uuid = id;
+  public Student(UUID uuid, String name, Email email, Password password) {
+    this.uuid = uuid;
 
     this.name = name;
 
     this.email = email;
+
+    this.password = password;
   }
 
   public UUID getUUID() {
