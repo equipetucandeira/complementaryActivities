@@ -5,21 +5,25 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public final class Password {
-  private final String pattern = "\\w{8,}";
+  private static final String pattern = "$.{8,}$";
 
-  private String hash;
+  private String password;
 
-  public Password(String password) {
+  public Password(String password) throws ShortPasswordException {
+    this.password = password;
+  }
+
+  public static Password from(String password) throws ShortPasswordException {
     if (!Pattern.compile(pattern).matcher(password).matches()) {
       throw new ShortPasswordException("A senha deve possuir ao menos 8 caracteres.");
     }
 
-    this.hash = Base64.getEncoder().encodeToString(password.getBytes());
+    return new Password(password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hash);
+    return Objects.hash(this.password);
   }
 
   @Override
@@ -29,6 +33,6 @@ public final class Password {
 
   @Override
   public String toString() {
-    return this.hash;
+    return Base64.getEncoder().encodeToString(this.password.getBytes());
   }
 }
