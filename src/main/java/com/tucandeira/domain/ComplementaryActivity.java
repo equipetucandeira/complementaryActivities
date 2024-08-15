@@ -18,6 +18,10 @@ public abstract class ComplementaryActivity implements Serializable {
 
   private String supportingDocument;
 
+  private Course course;
+
+  private Student student;
+
   public ComplementaryActivity() {}
 
   public ComplementaryActivity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String supportingDocument) {
