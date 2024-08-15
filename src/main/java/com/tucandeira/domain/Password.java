@@ -9,13 +9,13 @@ public final class Password {
 
   private String password;
 
-  public Password(String password) throws ShortPasswordException {
+  public Password(String password) {
     this.password = password;
   }
 
-  public static Password from(String password) throws ShortPasswordException {
+  public static Password encrypt(String password) throws IllegalArgumentException {
     if (!Pattern.compile(pattern).matcher(password).matches()) {
-      throw new ShortPasswordException("A senha deve possuir ao menos 8 caracteres.");
+      throw new IllegalArgumentException("A senha deve possuir ao menos 8 caracteres.");
     }
 
     return new Password(password);

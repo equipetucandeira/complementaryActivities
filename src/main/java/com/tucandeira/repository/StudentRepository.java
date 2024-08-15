@@ -22,13 +22,15 @@ public final class StudentRepository implements Repository<Student> {
 
   @Override
   public Student cast(ResultSet resultSet) throws SQLException {
+    UUID uuid = UUID.fromString(resultSet.fromString("uuid"));
+
     String name = resultSet.getString("name");
 
     Email email = new Email(resultSet.getString("email"));
 
     Password password = new Password(resultSet.getString("password"));
 
-    return new Student(name, email, password);
+    return new Student(uuid, name, email, password);
   }
 
   @Override
@@ -45,11 +47,11 @@ public final class StudentRepository implements Repository<Student> {
       statement.setString(4, student.getPassword().toString());
 
       statement.executeUpdate();
+
+      return true;
     } catch (SQLException exception) {
       return false;
     }
-
-    return true;
   }
 
   @Override
@@ -57,7 +59,7 @@ public final class StudentRepository implements Repository<Student> {
     Collection<Student> students = new ArrayList<>();
 
     try {
-     var statement = this.connection.prepareStatement("SELECT * FROM Students");
+     var statement = this.connection.prepareStatement("SELECT * FROM Students WHERE active = TRUE");
 
      var resultSet = statement.executeQuery();
 

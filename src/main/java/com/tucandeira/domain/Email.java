@@ -7,7 +7,7 @@ public record Email(String address) {
 
   public Email {
     if (!Pattern.compile(pattern).matcher(address).matches()) {
-      throw new InvalidEmailAddressException("Endereço de e-mail inválido.");
+      throw new IllegalArgumentException("Endereço de e-mail inválido.");
     }
   }
 }
