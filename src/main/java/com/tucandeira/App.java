@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Properties;
 
-public final class App extends Application{
+public final class App extends Application {
   private static Connection connection;
   
   private static Properties properties;
@@ -48,6 +48,14 @@ public final class App extends Application{
     stage.show();
   }
 
+  private static Scene getScene(GridPane grid) {
+    return new Scene(grid, Integer.valueOf(properties.getProperty("app.window.width")), Integer.valueOf(properties.getProperty("app.window.height")));
+  }
+
+  private static Scene getScene(VBox box) {
+    return new Scene(box, Integer.valueOf(properties.getProperty("app.window.width")), Integer.valueOf(properties.getProperty("app.window.height")));
+  }
+
   private Scene createMainMenuScene(Stage stage) {
     var label = new Label("Menu Principal");
         
@@ -70,7 +78,7 @@ public final class App extends Application{
     layout.setPadding(new Insets(20));
     layout.getChildren().addAll(label, goToSceneStudent, goToSceneEvaluator, goToSceneList);
         
-    return new Scene(layout, 400, 300);
+    return getScene(layout);
   }
 
   private Scene createSceneStudent(Stage stage) {
@@ -79,12 +87,6 @@ public final class App extends Application{
     var label = new Label("Adicionar atividade");
     var backToMenu = new Button("Voltar para Menu Principal");
     backToMenu.setOnAction(event -> stage.setScene(createMainMenuScene(stage)));
-
-    var yearLabel = new Label("Ano Letivo:");
-    var yearField = new TextField();
-
-    var periodLabel = new Label("Período Letivo:");
-    var periodField = new TextField();
 
     var vinculationLabel = new Label("Vinculação:");
         
@@ -110,10 +112,6 @@ public final class App extends Application{
     var endDateLabel = new Label("Data de Término:");
     var endDatePicker = new DatePicker();
 
-    var additionalInfoLabel = new Label("Informações Complementares:");
-    var additionalInfoArea = new TextArea();
-    additionalInfoArea.setPrefRowCount(4);
-
     var attachmentLabel = new Label("Anexo:");
     var attachmentButton = new Button("Escolher Arquivo");
 
@@ -126,11 +124,6 @@ public final class App extends Application{
     grid.setPadding(new Insets(10));
     grid.setAlignment(Pos.CENTER);
         
-    grid.add(yearLabel, 0, 0);
-    grid.add(yearField, 1, 0);
-    grid.add(periodLabel, 0, 1);
-    grid.add(periodField, 1, 1);
-
     grid.add(vinculationLabel, 0, 2);
     grid.add(option1, 1, 2);
     grid.add(option2, 2, 2);
@@ -150,9 +143,6 @@ public final class App extends Application{
     grid.add(endDateLabel, 0, 7);
     grid.add(endDatePicker, 1, 7);
 
-    grid.add(additionalInfoLabel, 0, 8);
-    grid.add(additionalInfoArea, 1, 8, 2, 1);
-
     grid.add(attachmentLabel, 0, 9);
     grid.add(attachmentButton, 1, 9);
 
@@ -161,9 +151,7 @@ public final class App extends Application{
 
     grid.add(backToMenu, 0, 12, 2, 1);
 
-    // Criar e retornar a cena
-    var scene = new Scene(grid, 500, 400);
-    return scene;
+    return getScene(grid);
   }
 
   private Scene createSceneEvaluator(Stage stage) {    
@@ -199,8 +187,7 @@ public final class App extends Application{
 
     grid.add(backToMenu, 0, 3, 3, 1);
 
-    var scene = new Scene(grid, 400, 300);
-    return scene;
+    return getScene(grid);
   }
 
   private Scene createSceneListActivities(Stage stage) {
@@ -212,6 +199,8 @@ public final class App extends Application{
       "Exemplo 3 - Tipo: Curricular, Data: 30/01/2024"
     );
     listView.setItems(activities);
+    listView.setPrefWidth(Integer.valueOf(properties.getProperty("app.window.width")));
+    listView.setPrefHeight(Integer.valueOf(properties.getProperty("app.window.height")));
 
     var backToMenu = new Button("Voltar para Menu Principal");
     backToMenu.setOnAction(event -> stage.setScene(createMainMenuScene(stage)));
@@ -227,18 +216,11 @@ public final class App extends Application{
     grid.add(listView, 0, 1, 2, 1); 
     grid.add(backToMenu, 0, 2); 
         
-    var scene = new Scene(grid, 400, 300);
-    return scene;
+    return getScene(grid);
   }
 
   private Scene createSceneDetails(Stage stage){
     var titleLabel = new Label("Detalhes da Atividade");
-
-    var yearLabel = new Label("Ano Letivo:");
-    var yearValue = new Label("2024");
-
-    var periodLabel = new Label("Período Letivo:");
-    var periodValue = new Label("1");
 
     var vinculationLabel = new Label("Vinculação:");
     var vinculationValue = new Label("Curricular");
@@ -261,11 +243,6 @@ public final class App extends Application{
 
     grid.add(titleLabel, 0, 0, 2, 1);
 
-    grid.add(yearLabel, 0, 1);
-    grid.add(yearValue, 1, 1);
-    grid.add(periodLabel, 0, 2);
-    grid.add(periodValue, 1, 2);
-
     grid.add(vinculationLabel, 0, 3);
     grid.add(vinculationValue, 1, 3);
 
@@ -276,9 +253,8 @@ public final class App extends Application{
     grid.add(additionalInfoArea, 0, 6, 2, 1);
 
     grid.add(backButton, 0, 7, 2, 1);
-    
-    var scene = new Scene(grid, 400, 400);
-    return scene;
+
+    return getScene(grid);
   }
  
   public static void boot() throws ClassNotFoundException, IOException,SQLException {
