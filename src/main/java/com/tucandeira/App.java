@@ -1,62 +1,89 @@
 package com.tucandeira;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.Menu;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
-import javafx.scene.layout.GridPane;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Observable;
 import java.util.Properties;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import com.tucandeira.ui.JavaFX;
 
 public final class App extends Application {
   private static Connection connection;
-  
+
   private static Properties properties;
 
   public static void main(String[] args) {
-    try {
-      boot();
-
-      launch(args);
-    } catch (Exception exception) {
-      exception.printStackTrace(System.out);
-    }
-
-    shutdown();
+    launch(args);
   }
 
   @Override
   public void start(Stage stage) {
+    try {
+      var root = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+
+      var stream = new FileInputStream(root + "/application.properties");
+
+      properties = new Properties();
+
+      properties.load(stream);
+
+      stream.close();
+
+      Class.forName(properties.getProperty("db.driver"));
+
+      connection = DriverManager.getConnection(
+        properties.getProperty("db.url"),
+        properties.getProperty("db.user"),
+        properties.getProperty("db.password")
+      );
+    } catch (Exception exception) {
+      exception.printStackTrace(System.out);
+      
+      Logger.getLogger(
+        Thread.currentThread().getStackTrace()[0].getClassName()
+      ).log(Level.SEVERE, exception.getMessage(), exception);
+
+      JavaFX.alert(null, null, exception.getMessage());
+    }
+
     var mainMenu = createMainMenuScene(stage);
     var addActivity = createSceneStudent(stage);
     var evaluation = createSceneEvaluator(stage);
     var listActivities = createSceneListActivities(stage);
 
     stage.setTitle(properties.getProperty("app.window.title"));
+
+    stage.initStyle(StageStyle.UNDECORATED);
+
+    stage.setResizable(false);
+
     stage.setScene(mainMenu);
+
     stage.show();
+  }
+
+  @Override
+  public void stop() {
+    try {
+      connection.close();
+    } catch (SQLException exception) {
+      System.exit(1);
+    }
+
+    System.exit(0);
   }
 
   private static Scene getScene(GridPane grid) {
@@ -78,16 +105,14 @@ public final class App extends Application {
 
     var goToSceneList = new Button("Listar atividades");
     goToSceneList.setOnAction(event -> stage.setScene(createSceneListActivities(stage)));
+
+    var close = new Button("Sair");
+    close.setOnAction(event -> stage.close());
     
-    var buttonStyle = "-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px;";
-    goToSceneStudent.setStyle(buttonStyle);
-    goToSceneEvaluator.setStyle(buttonStyle);
-    goToSceneList.setStyle(buttonStyle);
-   
     var layout = new VBox(15);
     layout.setAlignment(Pos.CENTER);
     layout.setPadding(new Insets(20));
-    layout.getChildren().addAll(label, goToSceneStudent, goToSceneEvaluator, goToSceneList);
+    layout.getChildren().addAll(label, goToSceneStudent, goToSceneEvaluator, goToSceneList, close);
         
     return getScene(layout);
   }
@@ -129,11 +154,6 @@ public final class App extends Application {
     var saveButton = new Button("Salvar");
     var resultLabel = new Label();
 
-    saveButton.setOnAction(event -> {
-      Popup popup = popupInfo(new Popup());
-      popup.show(stage);
-    });
-        
     var grid = new GridPane();
     grid.setHgap(10);
     grid.setVgap(10);
@@ -271,54 +291,5 @@ public final class App extends Application {
     grid.add(backButton, 0, 7, 2, 1);
 
     return getScene(grid);
-  }
-
-  private Popup popupInfo(Popup popup){
-    var label = new Label("This is Elon Musk");
-    var closeButton = new Button("Fechar");
-    label.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-color: black;");
-    
-    label.setMinWidth(300); 
-    label.setMinHeight(200);
-    
-    closeButton.setOnAction(e -> popup.hide());
-
-    VBox layout = new VBox(10);
-    layout.getChildren().addAll(label, closeButton);
-    layout.setAlignment(Pos.CENTER);
-
-    popup.getContent().add(layout);
-
-    return popup;
-  }
- 
-  public static void boot() throws ClassNotFoundException, IOException,SQLException {
-    var root = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-
-    var stream = new FileInputStream(root + "/application.properties");
-
-    properties = new Properties();
-
-    properties.load(stream);
-
-    stream.close();
-
-    Class.forName(properties.getProperty("db.driver"));
-
-    connection = DriverManager.getConnection(
-      properties.getProperty("db.url"),
-      properties.getProperty("db.user"),
-      properties.getProperty("db.password")
-    );
-  }
-
-  public static void shutdown() {
-    try {
-      connection.close();
-    } catch (SQLException exception) {
-      System.exit(1);
-    }
-
-    System.exit(0);
   }
 }
