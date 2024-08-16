@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
@@ -117,6 +118,11 @@ public final class App extends Application {
 
     var saveButton = new Button("Salvar");
     var resultLabel = new Label();
+
+    saveButton.setOnAction(event -> {
+      Popup popup = popupInfo(new Popup());
+      popup.show(stage);
+    });
         
     var grid = new GridPane();
     grid.setHgap(10);
@@ -255,6 +261,25 @@ public final class App extends Application {
     grid.add(backButton, 0, 7, 2, 1);
 
     return getScene(grid);
+  }
+
+  private Popup popupInfo(Popup popup){
+    var label = new Label("This is Elon Musk");
+    var closeButton = new Button("Fechar");
+    label.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-color: black;");
+    
+    label.setMinWidth(300); 
+    label.setMinHeight(200);
+    
+    closeButton.setOnAction(e -> popup.hide());
+
+    VBox layout = new VBox(10);
+    layout.getChildren().addAll(label, closeButton);
+    layout.setAlignment(Pos.CENTER);
+
+    popup.getContent().add(layout);
+
+    return popup;
   }
  
   public static void boot() throws ClassNotFoundException, IOException,SQLException {
