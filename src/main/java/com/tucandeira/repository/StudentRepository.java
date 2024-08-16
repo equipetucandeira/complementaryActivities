@@ -22,7 +22,7 @@ public final class StudentRepository implements Repository<Student> {
 
   @Override
   public Student cast(ResultSet resultSet) throws SQLException {
-    UUID uuid = UUID.fromString(resultSet.fromString("uuid"));
+    UUID uuid = UUID.fromString(resultSet.getString("uuid"));
 
     String name = resultSet.getString("name");
 

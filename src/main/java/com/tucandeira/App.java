@@ -11,8 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
-
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,127 +19,112 @@ import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Properties;
 
-
-import com.tucandeira.domain.Email;
-import com.tucandeira.domain.Student;
-import com.tucandeira.domain.Password;
-import com.tucandeira.repository.StudentRepository;
-
 public final class App extends Application{
   private static Connection connection;
   
   private static Properties properties;
 
   public static void main(String[] args) {
-    launch(args);
-    //try {
-      //boot();
-      //var repo = new StudentRepository(connection);
-      //repo.save(new Student("Thiago" , new Email("tmribeiro@gmail.com"), new Password("thiago123")));
-      
+    try {
+      boot();
 
-    //} catch (Exception exception) {
-    //  exception.printStackTrace(System.out);
-    //}
+      launch(args);
+    } catch (Exception exception) {
+      exception.printStackTrace(System.out);
+    }
 
-    //shutdown();
-    //System.out.println("Hello, Tucandeira!");
+    shutdown();
   }
-
 
   @Override
   public void start(Stage stage) {
-    Scene mainMenu = createMainMenuScene(stage);
-    Scene addActivity = createSceneStudent(stage);
-    Scene evaluation = createSceneEvaluator(stage);
-    Scene listActivities = createSceneListActivities(stage);
+    var mainMenu = createMainMenuScene(stage);
+    var addActivity = createSceneStudent(stage);
+    var evaluation = createSceneEvaluator(stage);
+    var listActivities = createSceneListActivities(stage);
 
-    stage.setTitle("Menu Principal");
+    stage.setTitle(properties.getProperty("app.window.title"));
     stage.setScene(mainMenu);
     stage.show();
   }
 
   private Scene createMainMenuScene(Stage stage) {
-    Label label = new Label("Menu Principal");
+    var label = new Label("Menu Principal");
         
-    Button goToSceneStudent = new Button("Adicionar atividade");
+    var goToSceneStudent = new Button("Adicionar atividade");
     goToSceneStudent.setOnAction(event -> stage.setScene(createSceneStudent(stage)));
         
-    Button goToSceneEvaluator = new Button("Avaliar atividade");
+    var goToSceneEvaluator = new Button("Avaliar atividade");
     goToSceneEvaluator.setOnAction(event -> stage.setScene(createSceneEvaluator(stage)));
 
-    Button goToSceneList = new Button("Listar atividades");
+    var goToSceneList = new Button("Listar atividades");
     goToSceneList.setOnAction(event -> stage.setScene(createSceneListActivities(stage)));
     
-    String buttonStyle = "-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px;";
+    var buttonStyle = "-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px;";
     goToSceneStudent.setStyle(buttonStyle);
     goToSceneEvaluator.setStyle(buttonStyle);
     goToSceneList.setStyle(buttonStyle);
    
-    VBox layout = new VBox(15);
+    var layout = new VBox(15);
     layout.setAlignment(Pos.CENTER);
     layout.setPadding(new Insets(20));
     layout.getChildren().addAll(label, goToSceneStudent, goToSceneEvaluator, goToSceneList);
         
     return new Scene(layout, 400, 300);
-
-
   }
 
   private Scene createSceneStudent(Stage stage) {
-    Label typeAndPeriodLabel = new Label("Tipo e Período Letivo");
+    var typeAndPeriodLabel = new Label("Tipo e Período Letivo");
 
-    Label label = new Label("Adicionar atividade");
-    Button backToMenu = new Button("Voltar para Menu Principal");
+    var label = new Label("Adicionar atividade");
+    var backToMenu = new Button("Voltar para Menu Principal");
     backToMenu.setOnAction(event -> stage.setScene(createMainMenuScene(stage)));
 
-    Label yearLabel = new Label("Ano Letivo:");
-    TextField yearField = new TextField();
+    var yearLabel = new Label("Ano Letivo:");
+    var yearField = new TextField();
 
-    Label periodLabel = new Label("Período Letivo:");
-    TextField periodField = new TextField();
+    var periodLabel = new Label("Período Letivo:");
+    var periodField = new TextField();
 
-    Label vinculationLabel = new Label("Vinculação:");
+    var vinculationLabel = new Label("Vinculação:");
         
-    RadioButton option1 = new RadioButton("Curricular");
-    RadioButton option2 = new RadioButton("Não Curricular");
-    ToggleGroup group = new ToggleGroup();
+    var option1 = new RadioButton("Curricular");
+    var option2 = new RadioButton("Não Curricular");
+    var group = new ToggleGroup();
     option1.setToggleGroup(group);
     option2.setToggleGroup(group);
 
-    Label activityTypeLabel = new Label("Tipo:");
-    ComboBox<String> comboBox = new ComboBox<>();
+    var activityTypeLabel = new Label("Tipo:");
+    var comboBox = new ComboBox<String>();
     comboBox.getItems().addAll("Opção 1", "Opção 2", "Opção 3");
 
-    Label activityNameLabel = new Label("Nome da Atividade:");
-    TextField activityNameField = new TextField();
+    var activityNameLabel = new Label("Nome da Atividade:");
+    var activityNameField = new TextField();
 
-    Label workloadLabel = new Label("Carga Horária:");
-    TextField workloadField = new TextField();
+    var workloadLabel = new Label("Carga Horária:");
+    var workloadField = new TextField();
 
-    Label startDateLabel = new Label("Data de Início:");
-    DatePicker startDatePicker = new DatePicker();
+    var startDateLabel = new Label("Data de Início:");
+    var startDatePicker = new DatePicker();
 
-    Label endDateLabel = new Label("Data de Término:");
-    DatePicker endDatePicker = new DatePicker();
+    var endDateLabel = new Label("Data de Término:");
+    var endDatePicker = new DatePicker();
 
-    Label additionalInfoLabel = new Label("Informações Complementares:");
-    TextArea additionalInfoArea = new TextArea();
+    var additionalInfoLabel = new Label("Informações Complementares:");
+    var additionalInfoArea = new TextArea();
     additionalInfoArea.setPrefRowCount(4);
 
-    Label attachmentLabel = new Label("Anexo:");
-    Button attachmentButton = new Button("Escolher Arquivo");
+    var attachmentLabel = new Label("Anexo:");
+    var attachmentButton = new Button("Escolher Arquivo");
 
-    Button saveButton = new Button("Salvar");
-    Label resultLabel = new Label();
-
+    var saveButton = new Button("Salvar");
+    var resultLabel = new Label();
         
-    GridPane grid = new GridPane();
+    var grid = new GridPane();
     grid.setHgap(10);
     grid.setVgap(10);
     grid.setPadding(new Insets(10));
     grid.setAlignment(Pos.CENTER);
-
         
     grid.add(yearLabel, 0, 0);
     grid.add(yearField, 1, 0);
@@ -178,35 +161,32 @@ public final class App extends Application{
 
     grid.add(backToMenu, 0, 12, 2, 1);
 
-        // Criar e retornar a cena
-    Scene scene = new Scene(grid, 500, 400);
+    // Criar e retornar a cena
+    var scene = new Scene(grid, 500, 400);
     return scene;
   }
 
   private Scene createSceneEvaluator(Stage stage) {    
-    Label titleLabel = new Label("Título da Tarefa:");
-    Label taskTitle = new Label("Atividade Exemplo");
+    var titleLabel = new Label("Título da Tarefa:");
+    var taskTitle = new Label("Atividade Exemplo");
         
-    Label typeLabel = new Label("Tipo da Tarefa:");
-    Label taskType = new Label("Tipo Exemplo");
+    var typeLabel = new Label("Tipo da Tarefa:");
+    var taskType = new Label("Tipo Exemplo");
 
-    Button approveButton = new Button("Aprovar");
-    Button rejectButton = new Button("Reprovar");
-    Button detailsButton = new Button("Ver Detalhes");
+    var approveButton = new Button("Aprovar");
+    var rejectButton = new Button("Reprovar");
+    var detailsButton = new Button("Ver Detalhes");
 
     detailsButton.setOnAction(event -> stage.setScene(createSceneDetails(stage)));
-
         
-    Button backToMenu = new Button("Voltar para Menu Principal");
+    var backToMenu = new Button("Voltar para Menu Principal");
     backToMenu.setOnAction(event -> stage.setScene(createMainMenuScene(stage)));
 
-        
-    GridPane grid = new GridPane();
+    var grid = new GridPane();
     grid.setHgap(10);
     grid.setVgap(10);
     grid.setPadding(new Insets(10));
     grid.setAlignment(Pos.CENTER);
-
         
     grid.add(titleLabel, 0, 0);
     grid.add(taskTitle, 1, 0);
@@ -219,25 +199,24 @@ public final class App extends Application{
 
     grid.add(backToMenu, 0, 3, 3, 1);
 
-        
-    Scene scene = new Scene(grid, 400, 300);
+    var scene = new Scene(grid, 400, 300);
     return scene;
   }
 
   private Scene createSceneListActivities(Stage stage) {
-    Label label = new Label("Lista de atividades");
-    ListView<String> listView = new ListView<>();
-    ObservableList<String> activities = FXCollections.observableArrayList(
+    var label = new Label("Lista de atividades");
+    var listView = new ListView<String>();
+    var activities = FXCollections.observableArrayList(
       "Exemplo 1 - Tipo: Curricular, Data: 01/01/2024",
       "Exemplo 2 - Tipo: Não Curricular, Data: 15/01/2024",
       "Exemplo 3 - Tipo: Curricular, Data: 30/01/2024"
     );
     listView.setItems(activities);
 
-    Button backToMenu = new Button("Voltar para Menu Principal");
+    var backToMenu = new Button("Voltar para Menu Principal");
     backToMenu.setOnAction(event -> stage.setScene(createMainMenuScene(stage)));
         
-    GridPane grid = new GridPane();
+    var grid = new GridPane();
     grid.setHgap(10);
     grid.setVgap(10);
 
@@ -247,41 +226,39 @@ public final class App extends Application{
     grid.add(label, 0, 0, 2, 1); 
     grid.add(listView, 0, 1, 2, 1); 
     grid.add(backToMenu, 0, 2); 
-
         
-    Scene scene = new Scene(grid, 400, 300);
+    var scene = new Scene(grid, 400, 300);
     return scene;
   }
 
   private Scene createSceneDetails(Stage stage){
-    Label titleLabel = new Label("Detalhes da Atividade");
+    var titleLabel = new Label("Detalhes da Atividade");
 
-    Label yearLabel = new Label("Ano Letivo:");
-    Label yearValue = new Label("2024");
+    var yearLabel = new Label("Ano Letivo:");
+    var yearValue = new Label("2024");
 
-    Label periodLabel = new Label("Período Letivo:");
-    Label periodValue = new Label("1");
+    var periodLabel = new Label("Período Letivo:");
+    var periodValue = new Label("1");
 
-    Label vinculationLabel = new Label("Vinculação:");
-    Label vinculationValue = new Label("Curricular");
+    var vinculationLabel = new Label("Vinculação:");
+    var vinculationValue = new Label("Curricular");
 
-    Label typeLabel = new Label("Tipo:");
-    Label typeValue = new Label("Tipo selecionado");
+    var typeLabel = new Label("Tipo:");
+    var typeValue = new Label("Tipo selecionado");
 
-    Label additionalInfoLabel = new Label("Informações Complementares:");
-    TextArea additionalInfoArea = new TextArea("");
+    var additionalInfoLabel = new Label("Informações Complementares:");
+    var additionalInfoArea = new TextArea("");
     additionalInfoArea.setEditable(false);
 
-    Button backButton = new Button("Voltar");
+    var backButton = new Button("Voltar");
     backButton.setOnAction(event -> stage.setScene(createSceneEvaluator(stage)));
 
-    GridPane grid = new GridPane();
+    var grid = new GridPane();
     grid.setHgap(10);
     grid.setVgap(10);
     grid.setPadding(new Insets(10));
     grid.setAlignment(Pos.CENTER);
 
-    
     grid.add(titleLabel, 0, 0, 2, 1);
 
     grid.add(yearLabel, 0, 1);
@@ -300,11 +277,10 @@ public final class App extends Application{
 
     grid.add(backButton, 0, 7, 2, 1);
     
-    Scene scene = new Scene(grid, 400, 400);
+    var scene = new Scene(grid, 400, 400);
     return scene;
   }
  
-
   public static void boot() throws ClassNotFoundException, IOException,SQLException {
     var root = Thread.currentThread().getContextClassLoader().getResource("").getPath();
 
