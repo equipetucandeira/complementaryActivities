@@ -1,6 +1,8 @@
 package com.tucandeira;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,8 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
 
 import com.tucandeira.ui.JavaFX;
 
@@ -42,6 +43,12 @@ public final class App extends Application {
 
       stream.close();
 
+      stage.setTitle(properties.getProperty("app.window.title"));
+
+      stage.initStyle(StageStyle.UNDECORATED);
+
+      stage.setResizable(false);
+
       Class.forName(properties.getProperty("db.driver"));
 
       connection = DriverManager.getConnection(
@@ -49,30 +56,20 @@ public final class App extends Application {
         properties.getProperty("db.user"),
         properties.getProperty("db.password")
       );
+
+      var mainMenu = createMainMenuScene(stage);
+      var addActivity = createSceneStudent(stage);
+      var evaluation = createSceneEvaluator(stage);
+      var listActivities = createSceneListActivities(stage);
+
+      stage.setScene(mainMenu);
+
+      stage.show();
     } catch (Exception exception) {
-      exception.printStackTrace(System.out);
-      
       Logger.getLogger(
         Thread.currentThread().getStackTrace()[0].getClassName()
       ).log(Level.SEVERE, exception.getMessage(), exception);
-
-      JavaFX.alert(null, null, exception.getMessage());
     }
-
-    var mainMenu = createMainMenuScene(stage);
-    var addActivity = createSceneStudent(stage);
-    var evaluation = createSceneEvaluator(stage);
-    var listActivities = createSceneListActivities(stage);
-
-    stage.setTitle(properties.getProperty("app.window.title"));
-
-    stage.initStyle(StageStyle.UNDECORATED);
-
-    stage.setResizable(false);
-
-    stage.setScene(mainMenu);
-
-    stage.show();
   }
 
   @Override
@@ -80,10 +77,10 @@ public final class App extends Application {
     try {
       connection.close();
     } catch (SQLException exception) {
-      System.exit(1);
+      Logger.getLogger(
+        Thread.currentThread().getStackTrace()[0].getClassName()
+      ).log(Level.SEVERE, exception.getMessage(), exception);
     }
-
-    System.exit(0);
   }
 
   private static Scene getScene(GridPane grid) {
@@ -95,7 +92,7 @@ public final class App extends Application {
   }
 
   private Scene createMainMenuScene(Stage stage) {
-    var label = new Label("Menu Principal");
+    var label = new Label(properties.getProperty("app.window.title"));
         
     var goToSceneStudent = new Button("Adicionar atividade");
     goToSceneStudent.setOnAction(event -> stage.setScene(createSceneStudent(stage)));
@@ -150,6 +147,21 @@ public final class App extends Application {
 
     var attachmentLabel = new Label("Anexo:");
     var attachmentButton = new Button("Escolher Arquivo");
+    attachmentButton.setOnAction(event -> {
+      var fileChooser = new FileChooser();
+
+      fileChooser.setTitle("Selecione um documento");
+
+      fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+
+      var selectedFile = fileChooser.showOpenDialog(stage);
+
+      if (selectedFile != null) {
+        attachmentButton.setText(selectedFile.getName());
+      } else {
+        System.out.println("Erro ao ler arquivo");
+      }
+    });
 
     var saveButton = new Button("Salvar");
     var resultLabel = new Label();
