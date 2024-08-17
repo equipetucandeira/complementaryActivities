@@ -43,12 +43,6 @@ public final class App extends Application {
 
       stream.close();
 
-      stage.setTitle(properties.getProperty("app.window.title"));
-
-      stage.initStyle(StageStyle.UNDECORATED);
-
-      stage.setResizable(false);
-
       Class.forName(properties.getProperty("db.driver"));
 
       connection = DriverManager.getConnection(
@@ -58,11 +52,20 @@ public final class App extends Application {
       );
 
       var mainMenu = createMainMenuScene(stage);
-      var addActivity = createSceneStudent(stage);
-      var evaluation = createSceneEvaluator(stage);
-      var listActivities = createSceneListActivities(stage);
 
-      stage.setScene(mainMenu);
+      stage.setTitle(properties.getProperty("app.window.title"));
+
+      stage.initStyle(StageStyle.UNDECORATED);
+
+      stage.setResizable(false);
+
+      var bounds = Screen.getPrimary().getVisualBounds();
+
+      stage.setX((bounds.getWidth() - stage.getWidth()) / 2);
+
+      stage.setY((bounds.getHeight() - stage.getHeight()) / 2);
+
+      setupScene(stage, mainMenu);
 
       stage.show();
     } catch (Exception exception) {
@@ -74,13 +77,11 @@ public final class App extends Application {
 
   @Override
   public void stop() {
-    try {
-      connection.close();
-    } catch (SQLException exception) {
-      Logger.getLogger(
-        Thread.currentThread().getStackTrace()[0].getClassName()
-      ).log(Level.SEVERE, exception.getMessage(), exception);
-    }
+    System.exit(0);
+  }
+
+  public void setupScene(Stage stage, Scene scene) {
+    stage.setScene(scene);
   }
 
   private static Scene getScene(GridPane grid) {
@@ -93,6 +94,10 @@ public final class App extends Application {
 
   private Scene createMainMenuScene(Stage stage) {
     var label = new Label(properties.getProperty("app.window.title"));
+
+    var email = new TextField();
+
+    var password = new PasswordField();
         
     var goToSceneStudent = new Button("Adicionar atividade");
     goToSceneStudent.setOnAction(event -> stage.setScene(createSceneStudent(stage)));
@@ -109,7 +114,7 @@ public final class App extends Application {
     var layout = new VBox(15);
     layout.setAlignment(Pos.CENTER);
     layout.setPadding(new Insets(20));
-    layout.getChildren().addAll(label, goToSceneStudent, goToSceneEvaluator, goToSceneList, close);
+    layout.getChildren().addAll(label, email, password, goToSceneStudent, goToSceneEvaluator, goToSceneList, close);
         
     return getScene(layout);
   }
