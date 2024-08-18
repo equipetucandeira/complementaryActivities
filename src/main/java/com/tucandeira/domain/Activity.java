@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @SuppressWarnings("serial")
-public final class ComplementaryActivity implements Serializable {
+public final class Activity implements Serializable {
   private UUID uuid;
 
   private Integer workload;
@@ -18,13 +18,13 @@ public final class ComplementaryActivity implements Serializable {
 
   private String attached;
 
-  public ComplementaryActivity() {}
+  public Complementary() {}
 
-  public ComplementaryActivity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached) {
+  public Complementary(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached) {
     this(UUID.randomUUID(), workload, start, end, curriculumLink, attached);
   }
 
-  public ComplementaryActivity(UUID uuid, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached) {
+  public Complementary(UUID uuid, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached) {
     if (workload <= 0) {
       throw new IllegalArgumentException("As atividades devem possuir carga horária maior que zero.");
     }

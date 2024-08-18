@@ -1,6 +1,6 @@
 package com.tucandeira.repository;
 
-import com.tucandeira.domain.ComplementaryActivity;
+import com.tucandeira.domain.Activity;
 import com.tucandeira.db.Repository;
 
 import java.sql.ResultSet;
@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.Optional;
 
-public final class ComplementaryActivityRepository implements Repository<ComplementaryActivity> {
+public final class ActivityRepository implements Repository<Activity> {
   @Override
-  public ComplementaryActivity cast(ResultSet resultSet) throws Exception {
-    var complementaryActivity = new ComplementaryActivity();
+  public Activity cast(ResultSet resultSet) throws Exception {
+    var complementaryActivity = new Activity();
 
     complementaryActivity.setUUID(resultSet.getString("id"));
 
@@ -28,22 +28,22 @@ public final class ComplementaryActivityRepository implements Repository<Complem
   }
 
   @Override
-  public boolean save(ComplementaryActivity activity) {
+  public boolean save(Activity activity) {
     return true;
   }
 
   @Override
-  public Collection<ComplementaryActivity> list() {
+  public Collection<Activity> list() {
     return new ArrayList<>();
   }
 
   @Override
-  public Optional<ComplementaryActivity> find(UUID uuid) {
+  public Optional<Activity> find(UUID uuid) {
     return null;
   }
 
   @Override
-  public boolean update(ComplementaryActivity activity) {
+  public boolean update(Activity activity) {
     return true;
   }
 

@@ -1,15 +1,15 @@
 package com.tucandeira.proxy;
 
 import com.tucandeira.db.Repository;
-import com.tucandeira.domain.ComplementaryActivity;
+import com.tucandeira.domain.Activity;
 
 import java.util.Collection;
 
-public final class ComplementaryActivityProxy extends Proxy<ComplementaryActivity> {
-  public ComplementaryActivityProxy(Repository<ComplementaryActivity> repository) {
+public final class ActivityProxy extends Proxy<Activity> {
+  public ActivityProxy(Repository<Activity> repository) {
     this.repository = repository;
 
-    this.proxy = new ComplementaryActivity();
+    this.proxy = new Activity();
   }
 
   @Override
@@ -18,7 +18,7 @@ public final class ComplementaryActivityProxy extends Proxy<ComplementaryActivit
   }
 
   @Override
-  public Collection<ComplementaryActivity> list() {
+  public Collection<Activity> list() {
     return this.repository.list();
   }
 
