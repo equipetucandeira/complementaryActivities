@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.stage.FileChooser?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.*?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.tucandeira.ui.StudentScreenControllerFX" minWidth="600" minHeight="400" prefWidth="1280" prefHeight="720">
+    <children>
+      <TabPane prefWidth="1280" prefHeight="720" fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Enviar atividade">
+            <content>
+              <VBox spacing="10" prefWidth="600" prefHeight="400">
+                <padding>
+                  <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
+                <Label text="Tipo e Período Letivo"/>
+                <Label text="Adicionar atividade"/> 
+
+                <Label text="Vinculação: "/>
+                <HBox spacing="10">
+                  <RadioButton text="Curricular" fx:id="option1"/>
+                  <RadioButton text="Não Curricular" fx:id="option2"/>
+                </HBox>
+                <Label text="Tipo:"/>
+                  <ComboBox fx:id="comboBox">
+                    <items>
+                      <FXCollections fx:factory="observableArrayList">
+                      </FXCollections>
+                    </items>
+                  </ComboBox>
+                  <Label text="Nome da Atividade:"/>
+                  <TextField fx:id="activityNameField"/>
+
+                  <Label text="Carga Horária:"/>
+                  <TextField fx:id="workloadField"/>
+                            
+                  <Label text="Data de Início:"/>
+                  <DatePicker fx:id="startDatePicker"/>
+                            
+                  <Label text="Data de Término:"/>
+                  <DatePicker fx:id="endDatePicker"/>
+
+                  <Label text="Anexo:"/>
+                  <HBox spacing="10">
+                      <Button text="Escolher Arquivo" fx:id="attachmentButton" onAction="#chooseFile"/>
+                      <Label fx:id="attachmentLabel" text="Nenhum arquivo selecionado"/>
+                  </HBox>
+
+                  <Button text="Salvar" onAction="#submitActivity"/>
+              </VBox>
+            </content>
+          </Tab>
+            <Tab text="Listar atividades">
+            <content>
+              <VBox spacing="10" alignment="TOP_CENTER">
+                <Label text="Lista de atividades"/>
+                <ListView fx:id="activitiesListView" prefWidth="600" prefHeight="400"/>
+                <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
+              </VBox>
+            </content>
+          </Tab>        
+        </tabs>
+      </TabPane>
+    </children>
+</AnchorPane>
+
