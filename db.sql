@@ -20,6 +20,13 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+CREATE PROCEDURE CreateCourse(IN id CHAR(36), IN name VARCHAR(60), IN workload TINYINT)
+BEGIN
+  INSERT INTO  Courses (id, name, workload) VALUES (id, name, workload);
+END $$
+DELIMITER ;
+
+DELIMITER $$
 CREATE PROCEDURE ActivateCourse(IN id CHAR(36))
 BEGIN
   UPDATE Courses SET active = TRUE WHERE Courses.id = id;
@@ -39,13 +46,18 @@ CREATE TABLE Users (
   email VARCHAR(255) UNIQUE NOT NULL,
   password BINARY(60) NOT NULL,
   role ENUM('STUDENT', 'SERVANT') NOT NULL,
-  active BOOLEAN DEFAULT TRUE,
+  active BOOLEAN DEFAULT TRUE
 );
 
+
+//TODOTODOTODO
+
+SELECT Users.name, Users.email, Courses.name AS 'course' FROM UsersCourses JOIN Users ON UsersCourses.user = Users.id JOIN Courses ON UsersCourses.course = Courses.id WHERE UsersCourses.active = TRUE AND Users.role = 'STUDENT';
+ 
 DELIMITER $$
 CREATE PROCEDURE GetStudents()
 BEGIN
-  SELECT id, name, email, password FROM Users WHERE active = TRUE AND role = 'STUDENT';
+  SELECT id, name, email, password AS 'course' FROM Users JOIN UsersCourses ON UsersCourses.user = id WHERE Users.active = TRUE AND role = 'STUDENT' ORDER BY name;
 END $$
 DELIMITER ;
 
