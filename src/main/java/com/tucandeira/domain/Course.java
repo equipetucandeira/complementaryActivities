@@ -81,4 +81,9 @@ public final class Course implements Serializable {
   public boolean equals(Object object) {
     return hashCode() == object.hashCode();
   }
+
+  @Override
+  public String toString() {
+    return this.name;
+  }
 }

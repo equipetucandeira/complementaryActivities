@@ -21,7 +21,7 @@ public final class CourseRepository implements Repository<Course> {
 
   @Override
   public Course cast(ResultSet resultSet) throws SQLException {
-    UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+    UUID uuid = UUID.fromString(resultSet.getString("id"));
 
     String name = resultSet.getString("name");
 
@@ -54,7 +54,7 @@ public final class CourseRepository implements Repository<Course> {
     Collection<Course> courses = new ArrayList<Course>();
 
     try {
-      var statement = this.connection.prepareStatement("SELECT * FROM Courses WHERE active = TRUE");
+      var statement = this.connection.prepareCall("{call GetCourses()}");
 
       var resultSet = statement.executeQuery();
 

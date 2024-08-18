@@ -1,6 +1,7 @@
 package com.tucandeira.repository;
 
 import com.tucandeira.db.Repository;
+import com.tucandeira.domain.Course;
 import com.tucandeira.domain.Email;
 import com.tucandeira.domain.Password;
 import com.tucandeira.domain.Student;
@@ -22,13 +23,15 @@ public final class StudentRepository implements Repository<Student> {
 
   @Override
   public Student cast(ResultSet resultSet) throws SQLException {
-    UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+    UUID uuid = UUID.fromString(resultSet.getString("id"));
 
     String name = resultSet.getString("name");
 
     Email email = new Email(resultSet.getString("email"));
 
     Password password = new Password(resultSet.getString("password"));
+
+    Course course = new Course(resultSet.getString("course"));
 
     return new Student(uuid, name, email, password);
   }
@@ -59,7 +62,7 @@ public final class StudentRepository implements Repository<Student> {
     Collection<Student> students = new ArrayList<>();
 
     try {
-     var statement = this.connection.prepareStatement("SELECT * FROM Students WHERE active = TRUE");
+     var statement = this.connection.prepareCall("{call GetStudents()}");
 
      var resultSet = statement.executeQuery();
 
