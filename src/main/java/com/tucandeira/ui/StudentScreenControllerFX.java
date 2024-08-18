@@ -14,6 +14,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -53,13 +55,17 @@ public class StudentScreenControllerFX {
     private RadioButton option2;
     
     @FXML
-    private ListView<String> activitiesListView;
+    private ListView<String> categoriesListView;
+
+    @FXML
+    private TreeView<String> myTreeView;
     
     
     @FXML
     public void initialize(){
       listTypes();
-      listActivities();
+      listCategories();
+      listTreeActivities();
     }
     
     @FXML
@@ -112,13 +118,57 @@ public class StudentScreenControllerFX {
       comboBox.setItems(options);
     }
     @FXML 
-    private void listActivities(){
-      var activities = FXCollections.observableArrayList(
-        "Exemplo 1 - Tipo: Curricular, Data: 01/01/2024",
-        "Exemplo 2 - Tipo: Não Curricular, Data: 15/01/2024",
-        "Exemplo 3 - Tipo: Curricular, Data: 30/01/2024"
+    private void listCategories(){
+      var categories = FXCollections.observableArrayList(
+        "Exemplo 1",
+        "Exemplo 2",
+        "Exemplo 3"
       );
-      activitiesListView.setItems(activities);
+      categoriesListView.setItems(categories);
     }
+    @FXML
+    private void listTreeActivities(){
+      var rootItem = new TreeItem<String>("Atividades submetidas");
+      rootItem.setExpanded(true);
+    
+    var needsToAnalyze = new TreeItem<String>("Atividades em espera");
+    var item1 = new TreeItem<String>("Atividade 1");
+    var item2 = new TreeItem<String>("Atividade 2");
+    var item3 = new TreeItem<String>("Atividade 3");
+
+    needsToAnalyze.getChildren().addAll(item1, item2, item3);
+
+    var expired = new TreeItem<String>("Atividades expiradas");
+    var itemE1 = new TreeItem<String>("Atividade 1");
+    var itemE2 = new TreeItem<String>("Atividade 2");
+    var itemE3 = new TreeItem<String>("Atividade 3");
+
+    expired.getChildren().addAll(itemE1, itemE2, itemE3);
+
+    var approved = new TreeItem<String>("Atividades aprovadas");
+    var itemA1 = new TreeItem<String>("Atividade 1");
+    var itemA2 = new TreeItem<String>("Atividade 2");
+    var itemA3 = new TreeItem<String>("Atividade 3");
+
+    approved.getChildren().addAll(itemA1, itemA2, itemA3);
+
+    var rejected = new TreeItem<String>("Atividades reprovadas");
+    var itemR1 = new TreeItem<String>("Atividade 1");
+    var itemR2 = new TreeItem<String>("Atividade 2");
+    var itemR3 = new TreeItem<String>("Atividade 3");
+
+    rejected.getChildren().addAll(item1, item2, item3);
+
+    rootItem.getChildren().addAll(needsToAnalyze, expired, approved, rejected);
+
+    myTreeView.setRoot(rootItem);
+
+    myTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue != null && newValue.isLeaf()) {
+          //goToViewDetails();
+        }
+    });
+  }
+
 
 }

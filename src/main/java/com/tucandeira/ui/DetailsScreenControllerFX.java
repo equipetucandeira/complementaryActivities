@@ -43,15 +43,8 @@ public class DetailsScreenControllerFX {
         Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela do menu principal.");
         alert.showAndWait();
       }
-  }
-  @FXML
-    private void approve(ActionEvent event) {
-      Alert alert = new Alert(Alert.AlertType.INFORMATION);
-      alert.setTitle("Tarefa aprovada");
-      alert.setHeaderText(null);
-      alert.setContentText("A tarefa foi aprovada com sucesso. As horas já foram contabilizadas!");
-      alert.showAndWait();
-    }*/
+  }*/
+
   @FXML
     private void goToServantScreen(ActionEvent event){
       var stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -69,6 +62,15 @@ public class DetailsScreenControllerFX {
         alert.showAndWait();
       }
     }
+  @FXML
+    private void approve(ActionEvent event) {
+      Alert alert = new Alert(Alert.AlertType.INFORMATION);
+      alert.setTitle("Tarefa aprovada");
+      alert.setHeaderText(null);
+      alert.setContentText("A tarefa foi aprovada com sucesso. As horas já foram contabilizadas!");
+      alert.showAndWait();
+    }
+
 
 
     /*@FXML
