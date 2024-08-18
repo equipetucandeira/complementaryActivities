@@ -6,8 +6,6 @@ import java.util.UUID;
 
 @SuppressWarnings("serial")
 public final class Servant extends User {
-  private ServantPermission permission;
-
   private Collection<Course> courses;
 
   public Servant(String name, Email email, Password password) {
@@ -26,13 +24,5 @@ public final class Servant extends User {
 
   public void add(Course course) {
     this.courses.add(course);
-  }
-
-  public ServantPermission getPermission() {
-    return this.permission;
-  }
-
-  public void setPermission(ServantPermission permission) {
-    this.permission = permission;
   }
 }
