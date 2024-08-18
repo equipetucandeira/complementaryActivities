@@ -1,5 +1,14 @@
 package com.tucandeira.ui;
 
+import com.tucandeira.App;
+import com.tucandeira.repository.CategoryRepository;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.stream.Collectors;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,14 +28,7 @@ import javafx.scene.control.TreeView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 public class StudentScreenControllerFX {
-
     @FXML
     private Button attachmentButton;
     
@@ -110,22 +112,34 @@ public class StudentScreenControllerFX {
     }
     @FXML
     private void listTypes(){
-      ObservableList<String> options = FXCollections.observableArrayList(
-        "option 1",
-        "option 2",
-        "option 3"
+      comboBox.setItems(
+        FXCollections.observableArrayList(
+          new CategoryRepository(
+            App.getConnection()
+          )
+          .list()
+          .stream()
+          .map(category -> category.getName())
+          .collect(Collectors.toList())
+        )
       );
-      comboBox.setItems(options);
     }
+
     @FXML 
     private void listCategories(){
-      var categories = FXCollections.observableArrayList(
-        "Exemplo 1",
-        "Exemplo 2",
-        "Exemplo 3"
+      categoriesListView.setItems(
+        FXCollections.observableArrayList(
+          new CategoryRepository(
+            App.getConnection()
+          )
+          .list()
+          .stream()
+          .map(category -> category.toString())
+          .collect(Collectors.toList())
+        )
       );
-      categoriesListView.setItems(categories);
     }
+
     @FXML
     private void listTreeActivities(){
       var rootItem = new TreeItem<String>("Atividades submetidas");
@@ -169,6 +183,4 @@ public class StudentScreenControllerFX {
         }
     });
   }
-
-
 }

@@ -76,4 +76,8 @@ public final class App extends Application {
   public void stop() {
     System.exit(0);
   }
+
+  public static Connection getConnection() {
+    return connection;
+  }
 }
