@@ -48,16 +48,11 @@ CREATE TABLE Users (
   role ENUM('STUDENT', 'SERVANT') NOT NULL,
   active BOOLEAN DEFAULT TRUE
 );
-
-
-//TODOTODOTODO
-
-SELECT Users.name, Users.email, Courses.name AS 'course' FROM UsersCourses JOIN Users ON UsersCourses.user = Users.id JOIN Courses ON UsersCourses.course = Courses.id WHERE UsersCourses.active = TRUE AND Users.role = 'STUDENT';
  
 DELIMITER $$
 CREATE PROCEDURE GetStudents()
 BEGIN
-  SELECT id, name, email, password AS 'course' FROM Users JOIN UsersCourses ON UsersCourses.user = id WHERE Users.active = TRUE AND role = 'STUDENT' ORDER BY name;
+  SELECT Users.id, Users.name, Users.email, Users.password, Courses.id AS 'course_id', Courses.name AS 'course', Courses.workload FROM UsersCourses JOIN Users ON UsersCourses.user = Users.id JOIN Courses ON UsersCourses.course = Courses.id WHERE UsersCourses.active = TRUE AND Users.role = 'STUDENT';
 END $$
 DELIMITER ;
 
