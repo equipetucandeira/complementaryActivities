@@ -12,12 +12,14 @@ import java.util.logging.Level;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
+import javafx.scene.Parent;
 
 import com.tucandeira.ui.JavaFX;
 
@@ -32,10 +34,14 @@ public final class App extends Application {
 
   @Override
   public void start(Stage stage) {
-    try {
-      var root = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+    try { 
+      var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/menuScreen.fxml").toURI().toURL());
 
-      var stream = new FileInputStream(root + "/application.properties");
+      Parent root = loader.load();
+      
+      var resourcePath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+
+      var stream = new FileInputStream(resourcePath + "/application.properties");
 
       properties = new Properties();
 
@@ -65,7 +71,10 @@ public final class App extends Application {
 
       stage.setY((bounds.getHeight() - stage.getHeight()) / 2);
 
-      setupScene(stage, mainMenu);
+      //setupScene(stage, mainMenu);
+      
+      var scene = new Scene(root);
+      setupScene(stage, scene);
 
       stage.show();
     } catch (Exception exception) {
@@ -82,6 +91,7 @@ public final class App extends Application {
 
   public void setupScene(Stage stage, Scene scene) {
     stage.setScene(scene);
+    stage.centerOnScreen();
   }
 
   private static Scene getScene(GridPane grid) {

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.tucandeira.ui.MenuControllerFX" minWidth="600" minHeight="400" prefWidth="1280" prefHeight="720">
+    <children>
+        <VBox alignment="CENTER" spacing="20" layoutX="1280" layoutY="720" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+            <Label text="Bem-vindo ao Sistema!" 
+                   style="-fx-font-family: Arial; -fx-font-size: 24px; -fx-text-fill: blue; -fx-padding: 10;"/>
+            <Button text="Estudante" onAction="#goToStudentScreen"/>
+            <Button text="Servidor" onAction="#goToServantScreen"/>
+            <Button text="Sair" onAction="#closeScreen"/>
+        </VBox>
+    </children>
+</AnchorPane>
+

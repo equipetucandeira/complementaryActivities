@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.stage.FileChooser?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.tucandeira.ui.ServantScreenControllerFX"
+          hgap="10" vgap="10" minWidth="600" minHeight="400" prefWidth="1280" prefHeight="720">
+    <children>
+      <TabPane prefWidth="1280" prefHeight="720" fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Avaliar atividade">
+            <content>
+              <VBox spacing="10">
+                <padding>
+                  <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
+                <Label text="Titulo da tarefa: "/>
+                <Label text="Atividade de exemplo"/>
+
+                <Label text="Tipo da tarefa: "/>
+                <Label text="Tipo Exemplo"/>
+
+                <Button text="Aprovar" GridPane.columnIndex="0" GridPane.rowIndex="2" onAction="#approve" />
+                <Button text="Reprovar" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Button text="Ver Detalhes" GridPane.columnIndex="2" GridPane.rowIndex="2" onAction="#goToViewDetails" />  
+              </VBox>
+            </content>
+          </Tab>
+          <Tab text="Listar atividades">
+            <content>
+              <VBox spacing="10" alignment="TOP_CENTER">
+                <Label text="Lista de atividades"/>
+                <ListView fx:id="activitiesListView" prefWidth="600" prefHeight="400"/>
+                <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
+              </VBox>
+            </content>
+          </Tab>        
+        </tabs>
+      </TabPane>
+    </children>
+</GridPane>
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.tucandeira.ui.JavaFX">
+    <children>
+        <TabPane prefWidth="600" prefHeight="400" fx:id="tabPane">
+            <tabs>
+                <Tab text="Aba 1">
+                    <content>
+                        <Label text="Conteúdo da Aba 1" />
+                    </content>
+                </Tab>
+                <Tab text="Aba 2">
+                    <content>
+                        <VBox>
+                            <Label text="Conteúdo da Aba 2" />
+                            <Button text="Clique Aqui" onAction="#handleButtonClick"/>
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</AnchorPane>
