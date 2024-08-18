@@ -114,26 +114,47 @@ BEGIN
 END $$
 DELIMITER ;
 
-CREATE TABLE Activities (
+CREATE TABLE Categories (
   id CHAR(36) PRIMARY KEY,
   name VARCHAR(60) UNIQUE NOT NULL,
-  description VARCHAR(80) NOT NULL,
+  description TEXT NOT NULL,
   submission_limit TINYINT NOT NULL,
   workload TINYINT NOT NULL,
   active BOOLEAN DEFAULT TRUE
 );
 
 DELIMITER $$
-CREATE PROCEDURE GetActivities()
+CREATE PROCEDURE GetCategories()
 BEGIN
-  SELECT id, name, description, submission_limit, workload FROM Activities WHERE active = TRUE;
+  SELECT id, name, description, submission_limit, workload FROM Categories WHERE active = TRUE;
 END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE GetActivity(IN id CHAR(36))
+CREATE PROCEDURE GetCategory(IN id CHAR(36))
 BEGIN
-  SELECT id, name, description, submission_limit, workload FROM Activities WHERE active = TRUE AND Activities.id = id;
+  SELECT id, name, description, submission_limit, workload FROM Categories WHERE active = TRUE AND Categories.id = id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE SetCategory(IN id CHAR(36), IN name VARCHAR(60), IN description TEXT, IN submission_limit TINYINT, IN workload TINYINT)
+BEGIN
+  INSERT INTO Categories (id, name, description, submission_limit, workload) VALUES (id, name, description, submission_limit, workload);
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE UpdateCategory(IN id CHAR(36), IN name VARCHAR(60), IN description TEXT, IN submission_limit TINYINT, IN workload TINYINT)
+BEGIN
+  UPDATE Categories SET Categories.name = name, Categories.description = description, Categories.submission_limit = submission_limit, Categories.workload = workload WHERE Categories.id = id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE DeleteCategory(IN id CHAR(36))
+BEGIN
+  UPDATE Categories SET active = FALSE WHERE Categories.id = id;
 END $$
 DELIMITER ;
 
@@ -152,29 +173,15 @@ CREATE TABLE Submissions (
   analyzed_at DATE,
   approved BOOLEAN,
   commentary VARCHAR(60) DEFAULT 'Sem comentários.',
-  state ENUM('DRAFT', 'WAITING', 'EXPIRED', 'ANALYZED') DEFAULT 'DRAFT',
+  state ENUM('WAITING', 'EXPIRED', 'ANALYZED') DEFAULT 'WAITING',
   FOREIGN KEY (activity) REFERENCES Activities (id),
   FOREIGN KEY (student) REFERENCES Users (id)
 );
 
 DELIMITER $$
-CREATE PROCEDURE CreateDraft(IN id CHAR(36), IN activity CHAR(36), IN student CHAR(36), IN workload TINYINT, IN start DATE, IN end DATE, IN attached CHAR(60))
+CREATE PROCEDURE Submit(IN id CHAR(36), IN activity CHAR(36), IN student CHAR(36), IN workload TINYINT, IN start DATE, IN end DATE, IN attached CHAR(60))
 BEGIN
-  INSERT INTO Submissions (id, activity, student, workload, start, end, attached, state) VALUES (id, activity, student, workload, start, end, 'DRAFT');
-END
-DELIMITIER ;
-
-DELIMITER $$
-CREATE PROCEDURE DeleteDraft(IN id CHAR(36))
-BEGIN
-  UPDATE Submissions SET active = FALSE WHERE Submissions.id = id;
-END
-DELIMITIER ;
-
-DELIMITER $$
-CREATE PROCEDURE Submit(IN id CHAR(36))
-BEGIN
-  UPDATE Submissions SET state = 'WAITING', submitted_at = CURDATE(), expires_at = DATE_ADD(CURDATE(), INTERVAL 30 DAY) WHERE active = TRUE AND Submissions.id = id;
+  INSERT INTO Submissions (id, activity, student, workload, attached, start, end, submitted_at, expires_at) VALUES (id, activity, student, workload, attached, start, end, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY));
 END
 DELIMITIER ;
 
@@ -199,18 +206,6 @@ END
 DELIMITIER ;
   UPDATE Submissions SET state = 'ANALYZED', analyzed_at = CURDATE(), Submissions.commentary = commentary, approved = FALSE WHERE active = TRUE AND state = 'WAITING' AND Submissions.id = id;
 DELIMITER $$
-CREATE PROCEDURE GetDrafts()
-BEGIN
-  SELECT id, activity, student, workload, start, end, created_at, attached FROM Submissions WHERE active = TRUE AND state = 'DRAFT';
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE GetDraft(IN id CHAR(36))
-BEGIN
-  SELECT id, activity, student, workload, start, end, created_at, attached FROM Submissions WHERE active = TRUE AND state = 'DRAFT' AND Submissions.id = id;
-END $$
-DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE GetWaitings()
