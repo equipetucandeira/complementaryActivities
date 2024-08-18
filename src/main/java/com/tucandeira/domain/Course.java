@@ -18,8 +18,6 @@ public final class Course implements Serializable {
 
   private Collection<Servant> servants;
 
-  private Collection<Activity> activities;
-
   public Course(String name, Integer workload) throws IllegalArgumentException {
     this(UUID.randomUUID(), name, workload);
   }
@@ -38,8 +36,6 @@ public final class Course implements Serializable {
     this.students = new HashSet<Student>();
 
     this.servants = new HashSet<Servant>();
-
-    this.activities = new HashSet<Activity>();
   }
 
   public UUID getUUID() {
@@ -66,10 +62,6 @@ public final class Course implements Serializable {
     this.students.add(student);
 
     student.setCourse(this);
-  }
-
-  public void add(Activity activity) {
-    this.activities.add(activity);
   }
 
   @Override
