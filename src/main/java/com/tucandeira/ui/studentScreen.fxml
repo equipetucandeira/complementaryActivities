@@ -24,7 +24,6 @@
                   <Insets top="20" right="20" bottom="20" left="20"/>
                 </padding>
                 <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
-                <Label text="Tipo e Período Letivo"/>
                 <Label text="Adicionar atividade"/> 
 
                 <Label text="Vinculação: "/>
@@ -32,7 +31,7 @@
                   <RadioButton text="Curricular" fx:id="option1"/>
                   <RadioButton text="Não Curricular" fx:id="option2"/>
                 </HBox>
-                <Label text="Tipo:"/>
+                <Label text="Categoria:"/>
                   <ComboBox fx:id="comboBox">
                     <items>
                       <FXCollections fx:factory="observableArrayList">
@@ -65,11 +64,20 @@
             <content>
               <VBox spacing="10" alignment="TOP_CENTER">
                 <Label text="Lista de atividades"/>
-                <ListView fx:id="activitiesListView" prefWidth="600" prefHeight="400"/>
+                <TreeView fx:id="myTreeView" prefWidth="600" prefHeight="400"/>
                 <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
               </VBox>
             </content>
-          </Tab>        
+          </Tab>
+          <Tab text="Listar Categorias">
+            <content>
+              <VBox spacing="10" alignment="TOP_CENTER">
+                <Label text="Lista de categorias"/>
+                <ListView fx:id="categoriesListView" prefWidth="600" prefHeight="400"/>
+                <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
+              </VBox>
+            </content>
+          </Tab>          
         </tabs>
       </TabPane>
     </children>

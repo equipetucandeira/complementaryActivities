@@ -16,6 +16,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +31,9 @@ import javafx.scene.layout.GridPane;
 public class ServantScreenControllerFX {
     @FXML
     private ListView<String> activitiesListView;
+
+    @FXML
+    private TreeView<String> myTreeView;
     
   @FXML
     private void goToMainMenu(ActionEvent event) {
@@ -56,22 +61,65 @@ public class ServantScreenControllerFX {
       alert.showAndWait();
     }
   @FXML
-    private void goToViewDetails(ActionEvent event){
-      var stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-      
+    private void goToViewDetails(){
+      var stage = (Stage) myTreeView.getScene().getWindow();
       try {
         var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/detailsScreen.fxml").toURI().toURL());
         Parent root = loader.load();
-            
+
         var scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
       } catch (IOException e) {
         e.printStackTrace();
-        Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela do menu principal.");
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela de detalhes.");
         alert.showAndWait();
-      }
+      }    
     }
+  @FXML
+  private void listTreeActivities(){
+    var rootItem = new TreeItem<String>("Atividades submetidas");
+    rootItem.setExpanded(true);
+    
+    var needsToAnalyze = new TreeItem<String>("Atividades a serem analisadas");
+    var item1 = new TreeItem<String>("Atividade 1");
+    var item2 = new TreeItem<String>("Atividade 2");
+    var item3 = new TreeItem<String>("Atividade 3");
+
+    needsToAnalyze.getChildren().addAll(item1, item2, item3);
+
+    var expired = new TreeItem<String>("Atividades expiradas");
+    var itemE1 = new TreeItem<String>("Atividade 1");
+    var itemE2 = new TreeItem<String>("Atividade 2");
+    var itemE3 = new TreeItem<String>("Atividade 3");
+
+    expired.getChildren().addAll(itemE1, itemE2, itemE3);
+
+    var approved = new TreeItem<String>("Atividades aprovadas");
+    var itemA1 = new TreeItem<String>("Atividade 1");
+    var itemA2 = new TreeItem<String>("Atividade 2");
+    var itemA3 = new TreeItem<String>("Atividade 3");
+
+    approved.getChildren().addAll(itemA1, itemA2, itemA3);
+
+    var rejected = new TreeItem<String>("Atividades reprovadas");
+    var itemR1 = new TreeItem<String>("Atividade 1");
+    var itemR2 = new TreeItem<String>("Atividade 2");
+    var itemR3 = new TreeItem<String>("Atividade 3");
+
+    rejected.getChildren().addAll(item1, item2, item3);
+
+    rootItem.getChildren().addAll(needsToAnalyze, expired, approved, rejected);
+
+    myTreeView.setRoot(rootItem);
+
+    myTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue != null && newValue.isLeaf()) {
+            goToViewDetails();
+        }
+    });
+  }
+
   @FXML 
   private void listActivities(){
       var activities = FXCollections.observableArrayList(
@@ -81,11 +129,11 @@ public class ServantScreenControllerFX {
       );
       activitiesListView.setItems(activities);
   }
-
+  
 
   @FXML
     public void initialize() {
-      listActivities();
+      listTreeActivities();
     }
     
 }

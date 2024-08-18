@@ -20,32 +20,13 @@
         <tabs>
           <Tab text="Avaliar atividade">
             <content>
-              <VBox spacing="10">
-                <padding>
-                  <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
+              <VBox spacing="10" alignment="TOP_CENTER" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10">
+                <Label text="Lista de atividades"/>
+                <TreeView fx:id="myTreeView" prefWidth="600" prefHeight="400"/>
                 <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
-                <Label text="Titulo da tarefa: "/>
-                <Label text="Atividade de exemplo"/>
-
-                <Label text="Tipo da tarefa: "/>
-                <Label text="Tipo Exemplo"/>
-
-                <Button text="Aprovar" GridPane.columnIndex="0" GridPane.rowIndex="2" onAction="#approve" />
-                <Button text="Reprovar" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Button text="Ver Detalhes" GridPane.columnIndex="2" GridPane.rowIndex="2" onAction="#goToViewDetails" />  
               </VBox>
             </content>
           </Tab>
-          <Tab text="Listar atividades">
-            <content>
-              <VBox spacing="10" alignment="TOP_CENTER">
-                <Label text="Lista de atividades"/>
-                <ListView fx:id="activitiesListView" prefWidth="600" prefHeight="400"/>
-                <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
-              </VBox>
-            </content>
-          </Tab>        
         </tabs>
       </TabPane>
     </children>
