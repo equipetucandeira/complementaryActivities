@@ -1,11 +1,7 @@
 package com.tucandeira.proxy;
 
 import com.tucandeira.db.Repository;
-import com.tucandeira.domain.Analyzed;
 import com.tucandeira.domain.ComplementaryActivity;
-import com.tucandeira.domain.Draft;
-import com.tucandeira.domain.Expired;
-import com.tucandeira.domain.Waiting;
 
 import java.util.Collection;
 
@@ -13,7 +9,7 @@ public final class ComplementaryActivityProxy extends Proxy<ComplementaryActivit
   public ComplementaryActivityProxy(Repository<ComplementaryActivity> repository) {
     this.repository = repository;
 
-    this.proxy = new Draft();
+    this.proxy = new ComplementaryActivity();
   }
 
   @Override

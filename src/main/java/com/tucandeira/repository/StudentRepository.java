@@ -23,17 +23,25 @@ public final class StudentRepository implements Repository<Student> {
 
   @Override
   public Student cast(ResultSet resultSet) throws SQLException {
-    UUID uuid = UUID.fromString(resultSet.getString("id"));
+    var uuid = UUID.fromString(resultSet.getString("id"));
 
-    String name = resultSet.getString("name");
+    var name = resultSet.getString("name");
 
-    Email email = new Email(resultSet.getString("email"));
+    var email = new Email(resultSet.getString("email"));
 
-    Password password = new Password(resultSet.getString("password"));
+    var password = new Password(resultSet.getString("password"));
 
-    Course course = new Course(resultSet.getString("course"));
+    var course = new Course(
+      UUID.fromString(resultSet.getString("course_id")),
+      resultSet.getString("course"),
+      resultSet.getInt("workload")
+    );
 
-    return new Student(uuid, name, email, password);
+    var student = new Student(uuid, name, email, password);
+
+    student.setCourse(course);
+
+    return student;
   }
 
   @Override

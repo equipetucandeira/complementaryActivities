@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @SuppressWarnings("serial")
-public abstract class ComplementaryActivity implements Serializable {
+public final class ComplementaryActivity implements Serializable {
   private UUID uuid;
 
   private Integer workload;
@@ -16,19 +16,15 @@ public abstract class ComplementaryActivity implements Serializable {
 
   private boolean curriculumLink;
 
-  private String supportingDocument;
-
-  private Course course;
-
-  private Student student;
+  private String attached;
 
   public ComplementaryActivity() {}
 
-  public ComplementaryActivity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String supportingDocument) {
-    this(UUID.randomUUID(), workload, start, end, curriculumLink, supportingDocument);
+  public ComplementaryActivity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached) {
+    this(UUID.randomUUID(), workload, start, end, curriculumLink, attached);
   }
 
-  public ComplementaryActivity(UUID uuid, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String supportingDocument) {
+  public ComplementaryActivity(UUID uuid, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached) {
     if (workload <= 0) {
       throw new IllegalArgumentException("As atividades devem possuir carga horária maior que zero.");
     }
@@ -43,7 +39,7 @@ public abstract class ComplementaryActivity implements Serializable {
 
     this.curriculumLink = curriculumLink;
 
-    this.supportingDocument = supportingDocument;
+    this.attached = attached;
   }
 
   public UUID getUUID() {
@@ -52,6 +48,10 @@ public abstract class ComplementaryActivity implements Serializable {
 
   public void setUUID(UUID uuid) {
     this.uuid = uuid;
+  }
+
+  public void setUUID(String uuid) {
+    this.uuid = UUID.fromString(uuid);
   }
 
   public Integer getWorkload() {
@@ -86,11 +86,11 @@ public abstract class ComplementaryActivity implements Serializable {
     this.curriculumLink = curriculumLink;
   }
 
-  public String getSupportingDocument() {
-    return this.supportingDocument;
+  public String getAttached() {
+    return this.attached;
   }
 
-  public void setSupportingDocument(String supportingDocument) {
-    this.supportingDocument = supportingDocument;
+  public void setAttached(String attached) {
+    this.attached = attached;
   }
 }
