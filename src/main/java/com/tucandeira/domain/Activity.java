@@ -24,6 +24,8 @@ public final class Activity implements Serializable {
 
   private Student student;
 
+  private boolean approved;
+
   public Activity() {}
 
   public Activity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
@@ -122,5 +124,13 @@ public final class Activity implements Serializable {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public void setApproved(boolean approved) {
+    this.approved;
+  }
+
+  public boolean isApproved() {
+    return this.approved;
   }
 }

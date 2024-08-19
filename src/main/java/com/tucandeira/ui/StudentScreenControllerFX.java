@@ -183,19 +183,25 @@ public class StudentScreenControllerFX {
     
     var needsToAnalyze = new TreeItem<String>("Atividades em espera");
     var expired = new TreeItem<String>("Atividades expiradas");
+    var approved = new TreeItem<String>("Atividades aprovadas");
+    var reproved = new TreeItem<String>("Atividades reprovadas");
 
     var activities = new ActivityRepository(App.getConnection()).list();
 
     for (var activity : activities) {
       var item = new TreeItem<String>(activity.getUUID().toString());
 
-      if (activity.getStatus().equals("WAITING")) {
+        if (activity.getStatus().equals("WAITING")) {
           needsToAnalyze.getChildren().add(item);
-      } else if (activity.getStatus().equals("EXPIRED")) {
+        } else if (activity.getStatus().equals("EXPIRED")) {
           expired.getChildren().add(item);
-      } else if (activity.getStatus().equals("ANALYZED")) {
-
-      }
+        } else if (activity.getStatus().equals("ANALYZED")) {
+          if (activity.isApproved()) {
+            approved.getChildren().add(item);
+          } else {
+            reproved.getChildren().add(item);
+          }
+         }
       }
 
       rootItem.getChildren().addAll(needsToAnalyze, expired);
