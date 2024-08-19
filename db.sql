@@ -157,6 +157,7 @@ CREATE TABLE Submissions (
   category CHAR(36) NOT NULL,
   student CHAR(36) NOT NULL,
   servant CHAR(36),
+  name VARCHAR(255) NOT NULL,
   workload TINYINT NOT NULL,
   start DATE NOT NULL,
   end DATE NOT NULL,
@@ -182,9 +183,9 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE Submit(IN id CHAR(36), IN category CHAR(36), IN student CHAR(36), IN workload TINYINT, IN start DATE, IN end DATE, IN curriculumn_link BOOLEAN, IN attached TEXT)
+CREATE PROCEDURE Submit(IN id CHAR(36), IN category CHAR(36), IN student CHAR(36), IN name VARCHAR(255), IN workload TINYINT, IN start DATE, IN end DATE, IN curriculumn_link BOOLEAN, IN attached TEXT)
 BEGIN
-  INSERT INTO Submissions (id, category, student, workload, curriculum_link, attached, start, end, submitted_at, expires_at) VALUES (id, category, student, workload, curriculum_link, attached, start, end, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY));
+  INSERT INTO Submissions (id, category, student, name, workload, curriculum_link, attached, start, end, submitted_at, expires_at) VALUES (id, category, student, name, workload, curriculum_link, attached, start, end, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY));
 END $$
 DELIMITER ;
 
