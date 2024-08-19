@@ -48,7 +48,7 @@ CREATE TABLE Users (
   role ENUM('STUDENT', 'SERVANT') NOT NULL,
   active BOOLEAN DEFAULT TRUE
 );
- 
+
 DELIMITER $$
 CREATE PROCEDURE GetStudents()
 BEGIN
@@ -157,7 +157,7 @@ CREATE TABLE Submissions (
   category CHAR(36) NOT NULL,
   student CHAR(36) NOT NULL,
   servant CHAR(36),
-  name VARCHAR(255) NOT NULL,
+  name VARCHAR(255) UNIQUE NOT NULL,
   workload TINYINT NOT NULL,
   start DATE NOT NULL,
   end DATE NOT NULL,
@@ -178,7 +178,7 @@ CREATE TABLE Submissions (
 DELIMITER $$
 CREATE PROCEDURE AnalyzeSubmission(IN id CHAR(36), IN servant CHAR(36), IN approved BOOLEAN, IN commentary VARCHAR(255))
 BEGIN
-  UPDATE Submissions SET Submissions.servant = servant, state = 'ANALYZED', Submissions.approved = approved, Submissions.commentary = commentary, analyzed_at = CURDATE() WHERE Submissions.id = id; 
+  UPDATE Submissions SET Submissions.servant = servant, state = 'ANALYZED', Submissions.approved = approved, Submissions.commentary = commentary, analyzed_at = CURDATE() WHERE Submissions.id = id;
 END $$
 DELIMITER ;
 
