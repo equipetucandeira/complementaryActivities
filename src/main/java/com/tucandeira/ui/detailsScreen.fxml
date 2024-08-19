@@ -35,9 +35,8 @@
     <Label text="Data de Término:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
     <Label fx:id="labelEnd" text="${end}" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
-    <Label text="Anexo:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-    <Label fx:id="labelAttached" text="${attached}" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-
+    <Button GridPane.columnIndex="0" GridPane.rowIndex="7" text="Fazer download de anexo" fx:id="attachmentDownload" onAction="#download" />
+    <Label fx:id="labelAttached" text="${attached}" GridPane.columnIndex="1" GridPane.rowIndex="7" visible="false"/>
 
     <Label text="Adicionar comentário:" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2"/>
     <TextArea fx:id="textCommentary" GridPane.columnIndex="0" GridPane.rowIndex="9" GridPane.columnSpan="2">

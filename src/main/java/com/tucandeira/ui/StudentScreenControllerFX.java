@@ -113,7 +113,7 @@ public class StudentScreenControllerFX {
       Stage stage = (Stage) attachmentButton.getScene().getWindow();
       var selectedFile = fileChooser.showOpenDialog(stage);
       if (selectedFile != null) {
-          attachmentLabel.setText(selectedFile.getName());
+          attachmentLabel.setText(selectedFile.getName() + ".pdf");
           this.file = selectedFile;
       } else {
           attachmentLabel.setText("Nenhum arquivo selecionado");
@@ -166,6 +166,7 @@ public class StudentScreenControllerFX {
       alert.setHeaderText(null);
       alert.setContentText(exception.getMessage());
       alert.showAndWait(); 
+      goToMainMenu(event);
       return;
       }
 
@@ -174,6 +175,7 @@ public class StudentScreenControllerFX {
       alert.setHeaderText(null);
       alert.setContentText("A tarefa foi enviada com sucesso. Aguarde a avaliação!");
       alert.showAndWait();
+      goToMainMenu(event);
     }
 
     @FXML

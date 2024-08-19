@@ -4,6 +4,7 @@ import com.tucandeira.App;
 import com.tucandeira.domain.Activity;
 import com.tucandeira.repository.*;
 
+import java.nio.file.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -25,44 +26,93 @@ import javafx.scene.layout.GridPane;
 
 public class DetailsScreenControllerFX {
   @FXML
-  private Label labelName;
-@FXML
-  private Label labelCategoryID;
-@FXML
-  private Label labelID;
-@FXML
-  private Label labelLink;
-@FXML
-  private Label labelCategory;
-@FXML
-  private Label labelWorkload;
-@FXML
-private Label labelStart;
-@FXML
-private Label labelEnd;
-@FXML
-private Label labelAttached;
-@FXML
-private TextArea textCommentary;
-
+  private Button attachmentDownload;
 
   @FXML
-   private void goToServantScreen(ActionEvent event){
-      var stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-      
-      try {
-        var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/servantScreen.fxml").toURI().toURL());
-        Parent root = loader.load();
-            
-        var scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-      } catch (IOException e) {
-        e.printStackTrace();
-        Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela do menu principal.");
-        alert.showAndWait();
+  private Label labelName;
+  
+  @FXML
+  private Label labelCategoryID;
+  
+  @FXML
+  private Label labelID;
+  
+  @FXML
+  private Label labelLink;
+
+  @FXML
+  private Label labelCategory;
+
+  @FXML
+  private Label labelWorkload;
+
+  @FXML
+  private Label labelStart;
+  
+  @FXML
+  private Label labelEnd;
+  
+  @FXML
+  private Label labelAttached;
+  
+  @FXML
+  private TextArea textCommentary;
+
+  @FXML
+  private void download(ActionEvent event) {
+    try {
+      var directoryChooser = new DirectoryChooser();
+
+      directoryChooser.setTitle("Selecione o destino do arquivo");
+
+      var stage = (Stage)attachmentDownload.getScene().getWindow();
+
+      var directory = directoryChooser.showDialog(stage);
+
+      if (directory == null) {
+        return;
       }
+
+      var source = new File(labelAttached.getText());
+
+      var target = new File(directory, source.getName() + ".pdf");
+
+      Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+      var alert = new Alert(Alert.AlertType.INFORMATION, "Download realizado em " + target.getAbsolutePath());
+
+      alert.showAndWait();
+    } catch (Exception exception) {
+      exception.printStackTrace();
+
+      var alert = new Alert(Alert.AlertType.ERROR, "Não foi possível fazer o download no momento. Tente novamente mais tarde!");
+      
+      alert.showAndWait();
     }
+  }
+
+  @FXML
+  private void goToServantScreen(ActionEvent event) {
+    var stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+      
+    try {
+      var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/servantScreen.fxml").toURI().toURL());
+      
+      Parent root = loader.load();
+            
+      var scene = new Scene(root);
+      
+      stage.setScene(scene);
+      
+      stage.show();
+    } catch (IOException e) {
+      e.printStackTrace();
+      
+      Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela do menu principal.");
+      
+      alert.showAndWait();
+    }
+  }
 
   @FXML
   private void approve(ActionEvent event) {

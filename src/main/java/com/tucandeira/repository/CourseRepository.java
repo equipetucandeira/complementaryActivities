@@ -5,7 +5,6 @@ import com.tucandeira.domain.Course;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -19,7 +18,7 @@ public final class CourseRepository implements Repository<Course> {
   }
 
   @Override
-  public Course cast(ResultSet resultSet) throws SQLException {
+  public Course cast(ResultSet resultSet) throws Exception {
     UUID uuid = UUID.fromString(resultSet.getString("id"));
 
     String name = resultSet.getString("name");
@@ -32,7 +31,7 @@ public final class CourseRepository implements Repository<Course> {
   @Override
   public boolean save(Course course) {
     try {
-      var statement = this.connection.prepareStatement("INSERT INTO Courses (uuid, name, workload) VALUES (?, ?, ?)");
+      var statement = this.connection.prepareCall("{call CreateCourse(?, ?, ?)}");
 
       statement.setString(1, course.getUUID().toString());
 
@@ -43,7 +42,7 @@ public final class CourseRepository implements Repository<Course> {
       statement.executeUpdate();
 
       return true;
-    } catch (SQLException exception) {
+    } catch (Exception exception) {
       return false;
     }
   }
@@ -60,7 +59,7 @@ public final class CourseRepository implements Repository<Course> {
       while (resultSet.next()) {
         courses.add(cast(resultSet));
       }
-    } catch (SQLException exception) {
+    } catch (Exception exception) {
       return new ArrayList<Course>();
     }
 
@@ -77,7 +76,7 @@ public final class CourseRepository implements Repository<Course> {
       var resultSet = statement.executeQuery();
 
       return Optional.of(cast(resultSet));
-    } catch (SQLException exception) {
+    } catch (Exception exception) {
       return Optional.ofNullable(null);
     }
   }
@@ -94,7 +93,7 @@ public final class CourseRepository implements Repository<Course> {
       statement.executeUpdate();
 
       return true;
-    } catch (SQLException exception) {
+    } catch (Exception exception) {
       return false;
     }
   }
@@ -109,7 +108,7 @@ public final class CourseRepository implements Repository<Course> {
       statement.executeUpdate();
 
       return true;
-    } catch (SQLException exception) {
+    } catch (Exception exception) {
       return false;
     }
   }
