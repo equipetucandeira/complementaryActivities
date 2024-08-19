@@ -204,7 +204,7 @@ public class StudentScreenControllerFX {
          }
       }
 
-      rootItem.getChildren().addAll(needsToAnalyze, expired);
+      rootItem.getChildren().addAll(needsToAnalyze, expired, approved, reproved);
 
       myTreeView.setRoot(rootItem);
   }

@@ -88,6 +88,26 @@ public final class ActivityRepository implements Repository<Activity> {
     }
   }
 
+  public Collection<Activity> listAll() {
+    try {
+      Collection<Activity> activities = new ArrayList<>();
+
+      var statement = this.connection.prepareCall("{call GetAllSubmissions()}");
+
+      var resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        activities.add(cast(resultSet));
+      }
+
+      return activities;
+    } catch (Exception exception) {
+      System.out.println(exception.getMessage());
+      return new ArrayList<>(); 
+    }
+  }
+
+
   @Override
   public Optional<Activity> find(UUID uuid) {
     return null;

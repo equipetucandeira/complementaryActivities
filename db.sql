@@ -183,6 +183,13 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+CREATE PROCEDURE GetAllSubmissions()
+BEGIN
+  SELECT * FROM Submissions WHERE active = TRUE;
+END $$
+DELIMITER ;
+
+DELIMITER $$
 CREATE PROCEDURE Submit(IN id CHAR(36), IN category CHAR(36), IN student CHAR(36), IN name VARCHAR(255), IN workload TINYINT, IN start DATE, IN end DATE, IN curriculumn_link BOOLEAN, IN attached TEXT)
 BEGIN
   INSERT INTO Submissions (id, category, student, name, workload, curriculum_link, attached, start, end, submitted_at, expires_at) VALUES (id, category, student, name, workload, curriculum_link, attached, start, end, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY));
