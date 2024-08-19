@@ -20,7 +20,7 @@ public final class Activity implements Serializable {
 
   private Category category;
 
-  private ActivityStatus status;
+  private String status;
 
   private Student student;
 
@@ -116,11 +116,11 @@ public final class Activity implements Serializable {
     this.attached = attached;
   }
 
-  public ActivityStatus getStatus() {
+  public String getStatus() {
     return this.status;
   }
 
-  public void setStatus(ActivityStatus status) {
+  public void setStatus(String status) {
     this.status = status;
   }
 }

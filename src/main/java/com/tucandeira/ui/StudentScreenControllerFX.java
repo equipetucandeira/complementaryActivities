@@ -84,8 +84,6 @@ public class StudentScreenControllerFX {
       this.comboBox.setPromptText("Selecione uma categoria");
       this.comboBox.setItems(FXCollections.observableArrayList(this.categories.stream().map(category -> category.getName()).collect(Collectors.toList())));
       this.categoriesListView.setItems(FXCollections.observableArrayList(this.categories.stream().map(category -> category.toString()).collect(Collectors.toList())));
-      listTypes();
-      listCategories();
       listTreeActivities();
     }
     
@@ -177,55 +175,31 @@ public class StudentScreenControllerFX {
       alert.setContentText("A tarefa foi enviada com sucesso. Aguarde a avaliação!");
       alert.showAndWait();
     }
-    @FXML
-    private void listTypes(){
-    }
-
-    @FXML 
-    private void listCategories(){
-    }
 
     @FXML
     private void listTreeActivities(){
-      var rootItem = new TreeItem<String>("Atividades submetidas");
+    var rootItem = new TreeItem<String>("Atividades submetidas");
       rootItem.setExpanded(true);
     
     var needsToAnalyze = new TreeItem<String>("Atividades em espera");
-    var item1 = new TreeItem<String>("Atividade 1");
-    var item2 = new TreeItem<String>("Atividade 2");
-    var item3 = new TreeItem<String>("Atividade 3");
-
-    needsToAnalyze.getChildren().addAll(item1, item2, item3);
-
     var expired = new TreeItem<String>("Atividades expiradas");
-    var itemE1 = new TreeItem<String>("Atividade 1");
-    var itemE2 = new TreeItem<String>("Atividade 2");
-    var itemE3 = new TreeItem<String>("Atividade 3");
 
-    expired.getChildren().addAll(itemE1, itemE2, itemE3);
+    var activities = new ActivityRepository(App.getConnection()).list();
 
-    var approved = new TreeItem<String>("Atividades aprovadas");
-    var itemA1 = new TreeItem<String>("Atividade 1");
-    var itemA2 = new TreeItem<String>("Atividade 2");
-    var itemA3 = new TreeItem<String>("Atividade 3");
+    for (var activity : activities) {
+      var item = new TreeItem<String>(activity.getUUID().toString());
 
-    approved.getChildren().addAll(itemA1, itemA2, itemA3);
+      if (activity.getStatus().equals("WAITING")) {
+          needsToAnalyze.getChildren().add(item);
+      } else if (activity.getStatus().equals("EXPIRED")) {
+          expired.getChildren().add(item);
+      } else if (activity.getStatus().equals("ANALYZED")) {
 
-    var rejected = new TreeItem<String>("Atividades reprovadas");
-    var itemR1 = new TreeItem<String>("Atividade 1");
-    var itemR2 = new TreeItem<String>("Atividade 2");
-    var itemR3 = new TreeItem<String>("Atividade 3");
+      }
+      }
 
-    rejected.getChildren().addAll(item1, item2, item3);
+      rootItem.getChildren().addAll(needsToAnalyze, expired);
 
-    rootItem.getChildren().addAll(needsToAnalyze, expired, approved, rejected);
-
-    myTreeView.setRoot(rootItem);
-
-    myTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-        if (newValue != null && newValue.isLeaf()) {
-          //goToViewDetails();
-        }
-    });
+      myTreeView.setRoot(rootItem);
   }
 }

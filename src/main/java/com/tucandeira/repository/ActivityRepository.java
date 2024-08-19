@@ -1,6 +1,8 @@
 package com.tucandeira.repository;
 
+import com.tucandeira.App;
 import com.tucandeira.domain.Activity;
+import com.tucandeira.domain.ActivityStatus;
 import com.tucandeira.db.Repository;
 
 import java.sql.Date;
@@ -28,9 +30,13 @@ public final class ActivityRepository implements Repository<Activity> {
 
     activity.setEnd(resultSet.getDate("end").toLocalDate());
 
+    activity.setWorkload(resultSet.getInt("workload"));
+
     activity.setCurriculumLink(resultSet.getBoolean("curriculum_link"));
 
     activity.setAttached(resultSet.getString("attached"));
+
+    activity.setStatus(resultSet.getString("state"));
 
     return activity;
   }
@@ -38,7 +44,7 @@ public final class ActivityRepository implements Repository<Activity> {
   @Override
   public boolean save(Activity activity) {
     try {
-      var statement = this.connection.prepareCall("{call Submit(?, ?, ?, ?, ?, ?, ?)}");
+      var statement = this.connection.prepareCall("{call Submit(?, ?, ?, ?, ?, ?, ?, ?)}");
 
       statement.setString(1, activity.getUUID().toString());
       statement.setString(2, activity.getCategory().getID().toString());
@@ -46,7 +52,8 @@ public final class ActivityRepository implements Repository<Activity> {
       statement.setInt(4, activity.getWorkload());
       statement.setDate(5, Date.valueOf(activity.getStart()));
       statement.setDate(6, Date.valueOf(activity.getEnd()));
-      statement.setString(7, activity.getAttached());
+      statement.setBoolean(7, activity.isCurriculumLinked());
+      statement.setString(8, activity.getAttached());
 
       statement.executeUpdate();
     } catch (Exception exception) {
@@ -59,7 +66,24 @@ public final class ActivityRepository implements Repository<Activity> {
 
   @Override
   public Collection<Activity> list() {
-    return new ArrayList<>();
+    try {
+      Collection<Activity> activities = new ArrayList<>();
+
+      var statement = this.connection.prepareCall("{call GetSubmissions(?)}");
+
+      statement.setString(1, App.getStudent().getUUID().toString());
+
+      var resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        activities.add(cast(resultSet));
+      }
+
+      return activities;
+    } catch (Exception exception) {
+      System.out.println(exception.getMessage());
+      return new ArrayList<>(); 
+    }
   }
 
   @Override
