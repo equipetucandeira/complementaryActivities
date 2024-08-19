@@ -1,6 +1,7 @@
 package com.tucandeira.ui;
 
 import com.tucandeira.App;
+import com.tucandeira.domain.Activity;
 import com.tucandeira.repository.ActivityRepository;
 
 import javafx.event.ActionEvent;
@@ -64,15 +65,30 @@ public class ServantScreenControllerFX {
   }
 
   @FXML
-  private void goToViewDetails(){
+  private void goToViewDetails(Activity activity){
     var stage = (Stage) myTreeView.getScene().getWindow();
     
     try {
       var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/detailsScreen.fxml").toURI().toURL());
+
+      loader.getNamespace().put("name", activity.getName());
+
+      loader.getNamespace().put("link", activity.isCurriculumLinked()? "Sim" : "Não");
+
+      loader.getNamespace().put("category", activity.getCategory().getName());
+
+      loader.getNamespace().put("workload", activity.getWorkload());
+
+      loader.getNamespace().put("start", activity.getStart());
+
+      loader.getNamespace().put("end", activity.getEnd());
+
+      loader.getNamespace().put("attached", activity.getAttached());
+
       Parent root = loader.load();
 
-      var scene = new Scene(root);
-      stage.setScene(scene);
+      stage.setScene(new Scene(root));
+
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();
@@ -115,7 +131,7 @@ var rootItem = new TreeItem<String>("Atividades submetidas");
 
     myTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue != null && newValue.isLeaf()) {
-            goToViewDetails();
+            goToViewDetails((Activity)activities.toArray()[0]); // TODO: trocar pela atividade clicada
         }
     });
   }

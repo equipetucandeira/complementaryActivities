@@ -7,51 +7,42 @@
 <GridPane xmlns:fx="http://javafx.com/fxml"
           fx:controller="com.tucandeira.ui.DetailsScreenControllerFX"
           alignment="CENTER" hgap="10" vgap="10" minWidth="600" minHeight="400" prefWidth="1280" prefHeight="720">
-    
+
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    
-    <Label text="Detalhes da Atividade" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
+    <Label text="${name}" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
 
-    
-    <Label text="Vinculação:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-    <Label text="Curricular" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <Label text="Vinculação Curricular:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <Label text="${link}" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-    
     <Label text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-    <Label text="Categoria selecionado" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <Label text="${category}" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-    
-    <Label text="Nome da Atividade:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-    <Label text="Nome da atividade aqui" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-
-    
     <Label text="Carga Horária:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-    <Label text="Carga horária aqui" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    <Label text="${workload}" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-    
+
     <Label text="Data de Início:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-    <Label text="Data de início aqui" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    <Label text="${start}" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
-    
+
     <Label text="Data de Término:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-    <Label text="Data de término aqui" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+    <Label text="${end}" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
     <Label text="Anexo:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-    <Label text="Nome do anexo aqui" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+    <Label text="${attached}" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
-    
-    <Label text="Informações Complementares:" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2"/>
+
+    <Label text="Adicionar comentário:" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2"/>
     <TextArea GridPane.columnIndex="0" GridPane.rowIndex="9" GridPane.columnSpan="2">
-        <editable>false</editable>
     </TextArea>
-    
-    
+
+
     <HBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.columnSpan="2">
         <Button text="Aprovar" onAction="#approve"/>
-        <Button text="Reprovar"/>
+        <Button text="Reprovar" onAction="#reprove"/>
     </HBox>
 
     <Button text="Voltar" onAction="#goToServantScreen" GridPane.columnIndex="0" GridPane.rowIndex="11" GridPane.columnSpan="2" alignment="CENTER"/>

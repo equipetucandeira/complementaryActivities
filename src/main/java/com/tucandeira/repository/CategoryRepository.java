@@ -83,8 +83,11 @@ public final class CategoryRepository implements Repository<Category> {
 
       var resultSet = statement.executeQuery();
 
-      return Optional.of(cast(resultSet));
+      if (resultSet.next()) {return Optional.of(cast(resultSet)); 
+    } 
+      throw new Exception("Categoria não encontrada.");
     } catch (Exception exception) {
+      System.out.println(exception.getMessage());
       return Optional.ofNullable(null);
     }
   }

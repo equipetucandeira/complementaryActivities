@@ -1,5 +1,7 @@
 package com.tucandeira.ui;
 
+import com.tucandeira.domain.Activity;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,30 +25,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.GridPane;
 
-
-
 public class DetailsScreenControllerFX {
-    
-  /*@FXML
-    private void goToMainMenu(ActionEvent event) {
-      var stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-      
-      try {
-        var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/menuScreen.fxml").toURI().toURL());
-        Parent root = loader.load();
-            
-        var scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-      } catch (IOException e) {
-        e.printStackTrace();
-        Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela do menu principal.");
-        alert.showAndWait();
-      }
-  }*/
-
   @FXML
-    private void goToServantScreen(ActionEvent event){
+   private void goToServantScreen(ActionEvent event){
       var stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
       
       try {
@@ -62,35 +43,23 @@ public class DetailsScreenControllerFX {
         alert.showAndWait();
       }
     }
+
   @FXML
-    private void approve(ActionEvent event) {
-      Alert alert = new Alert(Alert.AlertType.INFORMATION);
-      alert.setTitle("Tarefa aprovada");
-      alert.setHeaderText(null);
-      alert.setContentText("A tarefa foi aprovada com sucesso. As horas já foram contabilizadas!");
-      alert.showAndWait();
-    }
+  private void approve(ActionEvent event) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Tarefa aprovada");
+    alert.setHeaderText(null);
+    alert.setContentText("A tarefa foi aprovada com sucesso. As horas já foram contabilizadas!");
+    alert.showAndWait();
+    goToServantScreen(event);
+  }
 
+  @FXML
+  private void reprove(ActionEvent event) {
 
+  }
 
-    /*@FXML
-    public void initialize() {
-        /*detailsButton.setOnAction(event -> {
-            // Replace with the actual scene switch logic
-            Stage stage = (Stage) detailsButton.getScene().getWindow();
-            stage.setScene(createSceneDetails(stage));
-        });
-
-        backToMenu.setOnAction(event -> {
-            // Replace with the actual scene switch logic
-            Stage stage = (Stage) backToMenu.getScene().getWindow();
-            stage.setScene(createMainMenuScene(stage));
-        });
-    }*/
-
-    //private Scene createSceneDetails(Stage stage) {
-        // Implement scene creation logic
-    //}
-
-    
+  @FXML
+  public void initialize() {
+  }
 }

@@ -80,6 +80,10 @@ public final class Activity implements Serializable {
     return this.category;
   }
 
+  public void setCategory(Category category) {
+    this.category = category;
+  }
+
   public Integer getWorkload() {
     return this.workload;
   }

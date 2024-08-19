@@ -39,6 +39,10 @@ public final class ActivityRepository implements Repository<Activity> {
 
     activity.setStatus(resultSet.getString("state"));
 
+    var category = new CategoryRepository(this.connection).find(UUID.fromString(resultSet.getString("category")));
+
+    activity.setCategory(category.get());
+
     return activity;
   }
 
