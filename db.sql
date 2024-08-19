@@ -94,20 +94,6 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE ActivateUserCourse(IN user CHAR(36), IN course CHAR(36))
-BEGIN
-  UPDATE UsersCourses SET active = TRUE WHERE UsersCourses.user = user AND UsersCourses.course = course;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE DeactivateUserCourse(IN user CHAR(36), IN course CHAR(36))
-BEGIN
-  UPDATE UsersCourses SET active = FALSE WHERE UsersCourses.user = user AND UsersCourses.course = course;
-END $$
-DELIMITER ;
-
-DELIMITER $$
 CREATE PROCEDURE GetStudentCourses(IN id CHAR(36))
 BEGIN
   SELECT Users.name AS 'student', Courses.name AS 'course' FROM UsersCourses JOIN Users ON UsersCourses.user = Users.id JOIN Courses ON UsersCourses.course = Courses.id WHERE UsersCourses.active = TRUE AND UsersCourses.user = id;
@@ -158,32 +144,38 @@ BEGIN
 END $$
 DELIMITER ;
 
+CREATE TABLE CoursesCategories (
+  course CHAR(36) NOT NULL,
+  category CHAR(36) NOT NULL,
+  FOREIGN KEY (course) REFERENCES Courses (id),
+  FOREIGN KEY (category) REFERENCES Categories (id),
+  PRIMARY KEY(course, category)
+);
+
 CREATE TABLE Submissions (
   id CHAR(36) PRIMARY KEY,
-  activity CHAR(36) NOT NULL,
+  category CHAR(36) NOT NULL,
   student CHAR(36) NOT NULL,
   workload TINYINT NOT NULL,
   start DATE NOT NULL,
   end DATE NOT NULL,
   attached CHAR(60) NOT NULL,
   active BOOLEAN DEFAULT TRUE,
-  created_at DATE DEFAULT CURDATE(),
   submitted_at DATE,
   expires_at DATE,
   analyzed_at DATE,
   approved BOOLEAN,
   commentary VARCHAR(60) DEFAULT 'Sem comentários.',
-  state ENUM('WAITING', 'EXPIRED', 'ANALYZED') DEFAULT 'WAITING',
-  FOREIGN KEY (activity) REFERENCES Activities (id),
+  FOREIGN KEY (category) REFERENCES Categories (id),
   FOREIGN KEY (student) REFERENCES Users (id)
 );
 
 DELIMITER $$
-CREATE PROCEDURE Submit(IN id CHAR(36), IN activity CHAR(36), IN student CHAR(36), IN workload TINYINT, IN start DATE, IN end DATE, IN attached CHAR(60))
+CREATE PROCEDURE Submit(IN id CHAR(36), IN category CHAR(36), IN student CHAR(36), IN workload TINYINT, IN start DATE, IN end DATE, IN attached CHAR(60))
 BEGIN
-  INSERT INTO Submissions (id, activity, student, workload, attached, start, end, submitted_at, expires_at) VALUES (id, activity, student, workload, attached, start, end, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY));
-END
-DELIMITIER ;
+  INSERT INTO Submissions (id, category, student, workload, attached, start, end, submitted_at, expires_at) VALUES (id, category, student, workload, attached, start, end, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY));
+END $$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE Resubmit(IN id CHAR(36))
@@ -210,14 +202,14 @@ DELIMITER $$
 DELIMITER $$
 CREATE PROCEDURE GetWaitings()
 BEGIN
-  SELECT id, activity, student, workload, start, end, created_at, submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'WAITING';
+  SELECT id, category, student, workload, start, end,   submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'WAITING';
 END $$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE GetWaiting(IN id CHAR(36))
 BEGIN
-  SELECT id, activity, student, workload, start, end, created_at, submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'WAITING' AND Submissions.id = id;
+  SELECT id, category, student, workload, start, end,   submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'WAITING' AND Submissions.id = id;
 END $$
 DELIMITER ;
 
@@ -231,27 +223,27 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE GetExpireds()
 BEGIN
-  SELECT id, activity, student, workload, start, end, created_at, submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'EXPIRED';
+  SELECT id, category, student, workload, start, end,   submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'EXPIRED';
 END $$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE GetExpired(IN id CHAR(36))
 BEGIN
-  SELECT id, activity, student, workload, start, end, created_at, submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'EXPIRED' AND Submissions.id = id;
+  SELECT id, category, student, workload, start, end,   submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'EXPIRED' AND Submissions.id = id;
 END $$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE GetAnalyzeds()
 BEGIN
-  SELECT id, approved, activity, student, workload, start, end, created_at, submitted_at, analyzed_at, attached FROM Submissions WHERE active = TRUE AND state = 'ANALYZED';
+  SELECT id, approved, category, student, workload, start, end,   submitted_at, analyzed_at, attached FROM Submissions WHERE active = TRUE AND state = 'ANALYZED';
 END $$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE GetAnalyzed(IN id CHAR(36))
 BEGIN
-  SELECT id, approved, activity, student, workload, start, end, created_at, submitted_at, analyzed_at, attached FROM Submissions WHERE active = TRUE AND state = 'ANALYZED' AND Submissions.id = id;
+  SELECT id, approved, category, student, workload, start, end,   submitted_at, analyzed_at, attached FROM Submissions WHERE active = TRUE AND state = 'ANALYZED' AND Submissions.id = id;
 END $$
 DELIMITER ;
