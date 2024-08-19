@@ -1,0 +1,50 @@
+call CreateCourse('8a5f4d5f-1e84-4486-8b49-2e27e85f871f', 'Tecnologia em Análise e Desenvolvimento de Sistemas', 20);
+call CreateCourse('8535678d-cd65-468a-bfa1-44301ceb98f4', 'Engenharia de Controle e Automação', 20);
+call CreateCourse('7c0961b7-3350-4d3e-bff2-8e9c584eb50e', 'Bacharelado em Ciência da Computação', 20);
+call CreateCourse('7bbcfc8c-31ed-42a2-8436-512b78de23aa', 'Licenciatura em Física', 20);
+call CreateCourse('8f9bdc78-1e82-418e-b013-e13fb417352e', 'Tecnologia em Automação Industrial', 20);
+call CreateCourse('767f5bc6-c1b3-4f72-ad34-78006e257732', 'Engenharia Elétrica', 20);
+call CreateCourse('4586eebb-0f29-421b-97ff-9c65eef673a1', 'Tecnologia em Sistemas de Energia Renovável', 20);
+call CreateCourse('33b5a18d-80ec-49d4-9b27-4a3375b920ff', 'Licenciatura em Matemática', 20);
+call CreateCourse('b21d1a07-d6a8-4a3f-9f73-f7089ab714e7', 'Engenharia Mecânica', 20);
+call CreateCourse('9b39be9b-d229-4db7-88cf-15e6181cabc3', 'Tecnologia em Redes de Computadores', 20);
+
+call CreateStudent('2f581551-a66a-4fb7-ad88-b702508ee738', 'Alice Martins', 'alice.martins@aluno.ifsp.edu.br', 'password');
+call CreateStudent('3533b01b-343e-4b20-969c-b6cd78c8c466', 'Bruno Oliveira', 'bruno.oliveira@aluno.ifsp.edu.br', 'password');
+call CreateStudent('23b25a4a-1cb2-4a9f-a187-3ef315fcefbe', 'Camila Souza', 'camila.souza@aluno.ifsp.edu.br', 'password');
+call CreateStudent('f117d127-2f34-4cec-94ac-b083107691b4', 'Diego Ferreira', 'diego.ferreira@aluno.ifsp.edu.br', 'password');
+call CreateStudent('ee01d60f-239e-4e3e-8f54-1613152afc6e', 'Eduardo Lima', 'eduardo.lima@aluno.ifsp.edu.br', 'password');
+call CreateStudent('b0bbf353-d702-4a32-b302-d29487e4c6cc', 'Fernanda Almeida', 'fernanda.almeida@aluno.ifsp.edu.br', 'password');
+call CreateStudent('f3518f35-d204-4d9f-be55-ad0a352974d6', 'Gabriel Mendes', 'gabriel.mendes@aluno.ifsp.edu.br', 'password');
+call CreateStudent('60faec8a-b172-46ca-99ef-e4453ff5634a', 'Helena Rocha', 'helena.rocha@aluno.ifsp.edu.br', 'password');
+call CreateStudent('46781fc4-096d-4a1f-9896-4cf41e251a60', 'Igor Santos', 'igor.santos@aluno.ifsp.edu.br', 'password');
+call CreateStudent('e81acf2d-bc8e-4722-8034-f67e369c3fec', 'Juliana Carvalho', 'juliana.carvalho@aluno.ifsp.edu.br', 'password');
+
+call AddUserCourse('2f581551-a66a-4fb7-ad88-b702508ee738', '8a5f4d5f-1e84-4486-8b49-2e27e85f871f');
+call AddUserCourse('3533b01b-343e-4b20-969c-b6cd78c8c466', '8535678d-cd65-468a-bfa1-44301ceb98f4');
+call AddUserCourse('23b25a4a-1cb2-4a9f-a187-3ef315fcefbe', '7c0961b7-3350-4d3e-bff2-8e9c584eb50e');
+call AddUserCourse('f117d127-2f34-4cec-94ac-b083107691b4', '7bbcfc8c-31ed-42a2-8436-512b78de23aa');
+call AddUserCourse('ee01d60f-239e-4e3e-8f54-1613152afc6e', '8f9bdc78-1e82-418e-b013-e13fb417352e');
+call AddUserCourse('b0bbf353-d702-4a32-b302-d29487e4c6cc', '767f5bc6-c1b3-4f72-ad34-78006e257732');
+call AddUserCourse('f3518f35-d204-4d9f-be55-ad0a352974d6', '4586eebb-0f29-421b-97ff-9c65eef673a1');
+call AddUserCourse('60faec8a-b172-46ca-99ef-e4453ff5634a', '33b5a18d-80ec-49d4-9b27-4a3375b920ff');
+call AddUserCourse('46781fc4-096d-4a1f-9896-4cf41e251a60', 'b21d1a07-d6a8-4a3f-9f73-f7089ab714e7');
+call AddUserCourse('e81acf2d-bc8e-4722-8034-f67e369c3fec', '9b39be9b-d229-4db7-88cf-15e6181cabc3');
+
+
+call CreateServant('a132db4c-a5f2-43e5-9068-74c8ebf7010b', 'Amanda Pereira', 'amanda.pereira@ifsp.edu.br', 'password');
+call CreateServant('c6f2bc7b-6e48-4c73-b612-31718b9b4dd8', 'João Henrique Souza', 'joao.souza@ifsp.edu.br', 'password');
+call CreateServant('999b6fb5-a461-446a-a4be-6dbe879931d0', 'Mariana Silva', 'mariana.silva@ifsp.edu.br', 'password');
+call CreateServant('20dd288d-18ac-4c28-852b-4e26ce33077f', 'Ricardo Gomes', 'ricardo.gomes@ifsp.edu.br', 'password');
+call CreateServant('6644c038-1d7d-4bba-88db-b59bf49dd5f8', 'Fernanda Oliveira', 'fernanda.oliveira@ifsp.edu.br', 'password');
+
+call AddUserCourse('a132db4c-a5f2-43e5-9068-74c8ebf7010b', '8a5f4d5f-1e84-4486-8b49-2e27e85f871f');
+call AddUserCourse('c6f2bc7b-6e48-4c73-b612-31718b9b4dd8', '8a5f4d5f-1e84-4486-8b49-2e27e85f871f');
+call AddUserCourse('999b6fb5-a461-446a-a4be-6dbe879931d0', '4586eebb-0f29-421b-97ff-9c65eef673a1');
+call AddUserCourse('20dd288d-18ac-4c28-852b-4e26ce33077f', '9b39be9b-d229-4db7-88cf-15e6181cabc3');
+call AddUserCourse('6644c038-1d7d-4bba-88db-b59bf49dd5f8', '4586eebb-0f29-421b-97ff-9c65eef673a1');
+
+call SetCategory('9b924ad5-f187-4140-ae79-4b26fb521737', 'Curso Extracurricular', 'Participação em curso extracurricular (curso livre, extensão ou treinamento) online ou presencial na área da formação.', 5, 2);
+call SetCategory('065064c9-a61c-40e6-bfeb-35fcdf9c8f4e', 'Voluntariado', 'Atuar como voluntário em instituição pública, evento de tecnologia, instituição assistencial, monitoria de professores em disciplinas do ensino médio ou apoio aos alunos do curso.', 5, 2);
+call SetCategory('e063b293-7a27-4cd0-8d68-c416943cd1cc', 'Produção Acadêmica', 'Artigo publicado em jornal ou revista, trabalho científico elaborado e publicado.', 5, 2);
+
