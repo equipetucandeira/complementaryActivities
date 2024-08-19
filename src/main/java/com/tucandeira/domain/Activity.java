@@ -8,6 +8,8 @@ import java.util.UUID;
 public final class Activity implements Serializable {
   private UUID uuid;
 
+  private String name;
+
   private Integer workload;
 
   private LocalDate start;
@@ -28,16 +30,18 @@ public final class Activity implements Serializable {
 
   public Activity() {}
 
-  public Activity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
-    this(UUID.randomUUID(), workload, start, end, curriculumLink, attached, category);
+  public Activity(String name, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
+    this(UUID.randomUUID(), name, workload, start, end, curriculumLink, attached, category);
   }
 
-  public Activity(UUID uuid, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
+  public Activity(UUID uuid, String name, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
     if (workload <= 0) {
       throw new IllegalArgumentException("As atividades devem possuir carga horária maior que zero.");
     }
 
     this.uuid = uuid;
+
+    this.name = name;
 
     this.workload = workload;
 
@@ -62,6 +66,14 @@ public final class Activity implements Serializable {
 
   public void setUUID(String uuid) {
     this.uuid = UUID.fromString(uuid);
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public Category getCategory() {

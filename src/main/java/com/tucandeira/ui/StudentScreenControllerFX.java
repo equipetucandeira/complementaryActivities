@@ -155,7 +155,7 @@ public class StudentScreenControllerFX {
 
       Files.copy(file.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-      var activity = new Activity(UUID.randomUUID(), workload, start, end, link, targetPath.toString(), nameToCategory.get(category));
+      var activity = new Activity(UUID.randomUUID(), name, workload, start, end, link, targetPath.toString(), nameToCategory.get(category));
 
       activity.setStudent(App.getStudent());
 
@@ -189,7 +189,7 @@ public class StudentScreenControllerFX {
     var activities = new ActivityRepository(App.getConnection()).list();
 
     for (var activity : activities) {
-      var item = new TreeItem<String>(activity.getUUID().toString());
+      var item = new TreeItem<String>(activity.getName());
 
         if (activity.getStatus().equals("WAITING")) {
           needsToAnalyze.getChildren().add(item);

@@ -25,6 +25,8 @@ public final class ActivityRepository implements Repository<Activity> {
 
     activity.setUUID(resultSet.getString("id"));
 
+    activity.setName(resultSet.getString("name"));
+
     activity.setStart(resultSet.getDate("start").toLocalDate());
 
     activity.setEnd(resultSet.getDate("end").toLocalDate());
@@ -43,16 +45,17 @@ public final class ActivityRepository implements Repository<Activity> {
   @Override
   public boolean save(Activity activity) {
     try {
-      var statement = this.connection.prepareCall("{call Submit(?, ?, ?, ?, ?, ?, ?, ?)}");
+      var statement = this.connection.prepareCall("{call Submit(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 
       statement.setString(1, activity.getUUID().toString());
       statement.setString(2, activity.getCategory().getID().toString());
       statement.setString(3, activity.getStudent().getUUID().toString());
-      statement.setInt(4, activity.getWorkload());
-      statement.setDate(5, Date.valueOf(activity.getStart()));
-      statement.setDate(6, Date.valueOf(activity.getEnd()));
-      statement.setBoolean(7, activity.isCurriculumLinked());
-      statement.setString(8, activity.getAttached());
+      statement.setString(4, activity.getName());
+      statement.setInt(5, activity.getWorkload());
+      statement.setDate(6, Date.valueOf(activity.getStart()));
+      statement.setDate(7, Date.valueOf(activity.getEnd()));
+      statement.setBoolean(8, activity.isCurriculumLinked());
+      statement.setString(9, activity.getAttached());
 
       statement.executeUpdate();
     } catch (Exception exception) {
