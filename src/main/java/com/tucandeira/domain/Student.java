@@ -79,8 +79,8 @@ public final class Student implements Serializable {
     this.course = course;
   }
 
-  public void addActivity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
-    this.activities.add(new Activity(workload, start, end, curriculumLink, attached, category));
+  public void addActivity(Activity activity) {
+    this.activities.add(activity);
   }
 
   @Override

@@ -20,6 +20,10 @@ public final class Activity implements Serializable {
 
   private Category category;
 
+  private ActivityStatus status;
+
+  private Student student;
+
   public Activity() {}
 
   public Activity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
@@ -58,6 +62,10 @@ public final class Activity implements Serializable {
     this.uuid = UUID.fromString(uuid);
   }
 
+  public Category getCategory() {
+    return this.category;
+  }
+
   public Integer getWorkload() {
     return this.workload;
   }
@@ -94,7 +102,25 @@ public final class Activity implements Serializable {
     return this.attached;
   }
 
+  public void setStudent(Student student) {
+    this.student = student;
+
+    student.addActivity(this);
+  }
+
+  public Student getStudent() {
+    return this.student;
+  }
+
   public void setAttached(String attached) {
     this.attached = attached;
+  }
+
+  public ActivityStatus getStatus() {
+    return this.status;
+  }
+
+  public void setStatus(ActivityStatus status) {
+    this.status = status;
   }
 }

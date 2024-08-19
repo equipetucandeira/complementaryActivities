@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.UUID;
 
@@ -45,7 +46,7 @@ public class StudentScreenControllerFX {
     private Label attachmentLabel;
     
     @FXML
-    private ComboBox<Category> comboBox;
+    private ComboBox<String> comboBox;
     
     @FXML
     private TextField activityNameField;
@@ -72,12 +73,17 @@ public class StudentScreenControllerFX {
 
     private Collection<Category> categories = new ArrayList<>();
 
+    private HashMap<String, Category> nameToCategory = new HashMap<>();
 
     @FXML
     public void initialize(){
-      this.comboBox = new ComboBox<Category>();
-      this.comboBox.setPromptText("Selecione uma categoria");
       this.categories = new CategoryRepository(App.getConnection()).list();
+      for (var c : this.categories) {
+        nameToCategory.put(c.getName(), c);
+      }
+      this.comboBox.setPromptText("Selecione uma categoria");
+      this.comboBox.setItems(FXCollections.observableArrayList(this.categories.stream().map(category -> category.getName()).collect(Collectors.toList())));
+      this.categoriesListView.setItems(FXCollections.observableArrayList(this.categories.stream().map(category -> category.toString()).collect(Collectors.toList())));
       listTypes();
       listCategories();
       listTreeActivities();
@@ -139,6 +145,8 @@ public class StudentScreenControllerFX {
 
       var link = curriculumLink.isSelected();
 
+      var category = comboBox.getValue();
+
       var targetDir = new File("./src/main/resources/static");
       
       if (!targetDir.exists()) {
@@ -149,9 +157,11 @@ public class StudentScreenControllerFX {
 
       Files.copy(file.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-      App.getStudent().addActivity(workload, start, end, link, targetPath.toString(), new Category("", "", 20, 20));
+      var activity = new Activity(UUID.randomUUID(), workload, start, end, link, targetPath.toString(), nameToCategory.get(category));
 
-      new StudentRepository(App.getConnection()).save(App.getStudent());
+      activity.setStudent(App.getStudent());
+
+      new ActivityRepository(App.getConnection()).save(activity);
     } catch (Exception exception) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Ops!");
@@ -169,12 +179,10 @@ public class StudentScreenControllerFX {
     }
     @FXML
     private void listTypes(){
-      comboBox.setItems(this.categories);
     }
 
     @FXML 
     private void listCategories(){
-      categoriesListView.setItems(this.categories);
     }
 
     @FXML

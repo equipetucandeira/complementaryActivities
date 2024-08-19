@@ -1,6 +1,5 @@
 package com.tucandeira;
 
-
 import com.tucandeira.domain.*;
 
 import java.io.File;
@@ -24,6 +23,8 @@ public final class App extends Application {
   private static Properties properties;
 
   private static Student student;
+
+  private static Servant servant;
 
   public static void main(String[] args) {
     launch(args);
@@ -54,6 +55,13 @@ public final class App extends Application {
         UUID.fromString("2f581551-a66a-4fb7-ad88-b702508ee738"),
         "Alice Martins",
         new Email("alice.martins@aluno.ifsp.edu.br"),
+        new Password("password")
+      );
+
+      servant = new Servant(
+        UUID.fromString("c6f2bc7b-6e48-4c73-b612-31718b9b4dd8"),
+        "João Henrique Souza",
+        new Email("joao.souza@ifsp.edu.br"),
         new Password("password")
       );
 
@@ -96,5 +104,9 @@ public final class App extends Application {
 
   public static Student getStudent() {
     return student;
+  }
+
+  public static Servant getServant() {
+    return servant;
   }
 }

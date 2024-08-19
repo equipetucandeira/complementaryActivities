@@ -47,7 +47,7 @@ public final class StudentRepository implements Repository<Student> {
   @Override
   public boolean save(Student student) {
     try {
-      var statement = this.connection.prepareStatement("INSERT INTO Students (uuid, name, email, password) VALUES (?, ?, ?, ?)");
+      var statement = this.connection.prepareCall("INSERT INTO Students (uuid, name, email, password) VALUES (?, ?, ?, ?)");
 
       statement.setString(1, student.getUUID().toString());
 
