@@ -8,8 +8,6 @@ import java.util.Collection;
 public final class ActivityProxy extends Proxy<Activity> {
   public ActivityProxy(Repository<Activity> repository) {
     this.repository = repository;
-
-    this.proxy = new Activity();
   }
 
   @Override

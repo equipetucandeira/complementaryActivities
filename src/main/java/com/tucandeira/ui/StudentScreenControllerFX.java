@@ -1,11 +1,20 @@
 package com.tucandeira.ui;
 
 import com.tucandeira.App;
-import com.tucandeira.repository.CategoryRepository;
+import com.tucandeira.repository.*;
+import com.tucandeira.domain.*;
 
+import java.nio.file.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -36,7 +45,7 @@ public class StudentScreenControllerFX {
     private Label attachmentLabel;
     
     @FXML
-    private ComboBox<String> comboBox;
+    private ComboBox<Category> comboBox;
     
     @FXML
     private TextField activityNameField;
@@ -51,10 +60,7 @@ public class StudentScreenControllerFX {
     private DatePicker endDatePicker;
     
     @FXML
-    private RadioButton option1;
-    
-    @FXML
-    private RadioButton option2;
+    private CheckBox curriculumLink;
     
     @FXML
     private ListView<String> categoriesListView;
@@ -62,9 +68,16 @@ public class StudentScreenControllerFX {
     @FXML
     private TreeView<String> myTreeView;
     
-    
+    private File file;
+
+    private Collection<Category> categories = new ArrayList<>();
+
+
     @FXML
     public void initialize(){
+      this.comboBox = new ComboBox<Category>();
+      this.comboBox.setPromptText("Selecione uma categoria");
+      this.categories = new CategoryRepository(App.getConnection()).list();
       listTypes();
       listCategories();
       listTreeActivities();
@@ -97,47 +110,71 @@ public class StudentScreenControllerFX {
       var selectedFile = fileChooser.showOpenDialog(stage);
       if (selectedFile != null) {
           attachmentLabel.setText(selectedFile.getName());
+          this.file = selectedFile;
       } else {
           attachmentLabel.setText("Nenhum arquivo selecionado");
       }
     }
 
     @FXML
-    private void submitActivity(ActionEvent event) {
+    private void submitActivity(ActionEvent event) {  
+      if (activityNameField.getText().isEmpty() || workloadField.getText().isEmpty() || this.file == null) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Aviso!");
+        alert.setHeaderText(null);
+        alert.setContentText("Preencha corretamente todos os campos!");
+        alert.showAndWait();
+        return;
+      }
+
+      try {
+
+      var name = activityNameField.getText();
+
+      var workload = Integer.valueOf(workloadField.getText());
+
+      var start = startDatePicker.getValue();
+
+      var end = endDatePicker.getValue();
+
+      var link = curriculumLink.isSelected();
+
+      var targetDir = new File("./src/main/resources/static");
+      
+      if (!targetDir.exists()) {
+        targetDir.mkdirs();
+      }
+
+      var targetPath = targetDir.toPath().resolve(UUID.randomUUID().toString());
+
+      Files.copy(file.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+      App.getStudent().addActivity(workload, start, end, link, targetPath.toString(), new Category("", "", 20, 20));
+
+      new StudentRepository(App.getConnection()).save(App.getStudent());
+    } catch (Exception exception) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Ops!");
+      alert.setHeaderText(null);
+      alert.setContentText(exception.getMessage());
+      alert.showAndWait(); 
+      return;
+      }
+
       Alert alert = new Alert(Alert.AlertType.INFORMATION);
       alert.setTitle("Tarefa submetida");
       alert.setHeaderText(null);
-      alert.setContentText("A tarefa foi enviada com sucesso. Está aguardando avaliação!");
+      alert.setContentText("A tarefa foi enviada com sucesso. Aguarde a avaliação!");
       alert.showAndWait();
     }
     @FXML
     private void listTypes(){
-      comboBox.setItems(
-        FXCollections.observableArrayList(
-          new CategoryRepository(
-            App.getConnection()
-          )
-          .list()
-          .stream()
-          .map(category -> category.getName())
-          .collect(Collectors.toList())
-        )
-      );
+      comboBox.setItems(this.categories);
     }
 
     @FXML 
     private void listCategories(){
-      categoriesListView.setItems(
-        FXCollections.observableArrayList(
-          new CategoryRepository(
-            App.getConnection()
-          )
-          .list()
-          .stream()
-          .map(category -> category.toString())
-          .collect(Collectors.toList())
-        )
-      );
+      categoriesListView.setItems(this.categories);
     }
 
     @FXML

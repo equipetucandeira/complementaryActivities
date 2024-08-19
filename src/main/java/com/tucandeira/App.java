@@ -1,11 +1,15 @@
 package com.tucandeira;
 
+
+import com.tucandeira.domain.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -18,6 +22,8 @@ public final class App extends Application {
   private static Connection connection;
 
   private static Properties properties;
+
+  private static Student student;
 
   public static void main(String[] args) {
     launch(args);
@@ -42,6 +48,13 @@ public final class App extends Application {
         properties.getProperty("db.url"),
         properties.getProperty("db.user"),
         properties.getProperty("db.password")
+      );
+
+      student = new Student(
+        UUID.fromString("2f581551-a66a-4fb7-ad88-b702508ee738"),
+        "Alice Martins",
+        new Email("alice.martins@aluno.ifsp.edu.br"),
+        new Password("password")
       );
 
       stage.setTitle(properties.getProperty("app.window.title"));
@@ -79,5 +92,9 @@ public final class App extends Application {
 
   public static Connection getConnection() {
     return connection;
+  }
+
+  public static Student getStudent() {
+    return student;
   }
 }

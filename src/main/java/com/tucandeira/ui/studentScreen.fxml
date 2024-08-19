@@ -24,12 +24,11 @@
                   <Insets top="20" right="20" bottom="20" left="20"/>
                 </padding>
                 <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
-                <Label text="Adicionar atividade"/> 
+                <Label text="Adicionar atividade"/>
 
                 <Label text="Vinculação: "/>
                 <HBox spacing="10">
-                  <RadioButton text="Curricular" fx:id="option1"/>
-                  <RadioButton text="Não Curricular" fx:id="option2"/>
+                  <CheckBox text="Curricular" fx:id="curriculumLink"/>
                 </HBox>
                 <Label text="Categoria:"/>
                   <ComboBox fx:id="comboBox">
@@ -43,10 +42,10 @@
 
                   <Label text="Carga Horária:"/>
                   <TextField fx:id="workloadField"/>
-                            
+
                   <Label text="Data de Início:"/>
                   <DatePicker fx:id="startDatePicker"/>
-                            
+
                   <Label text="Data de Término:"/>
                   <DatePicker fx:id="endDatePicker"/>
 
@@ -77,9 +76,8 @@
                 <Button text="Voltar para o Menu Principal" onAction="#goToMainMenu"/>
               </VBox>
             </content>
-          </Tab>          
+          </Tab>
         </tabs>
       </TabPane>
     </children>
 </AnchorPane>
-

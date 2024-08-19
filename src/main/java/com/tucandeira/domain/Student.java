@@ -1,8 +1,10 @@
 package com.tucandeira.domain;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
-import java.io.Serializable;
 import java.util.UUID;
 
 @SuppressWarnings("serial")
@@ -17,7 +19,7 @@ public final class Student implements Serializable {
 
   private Course course;
 
-  private Collection<ComplementaryActivity> activities;
+  private Collection<Activity> activities;
 
   public Student() {}
 
@@ -33,6 +35,8 @@ public final class Student implements Serializable {
     this.email = email;
 
     this.password = password;
+
+    this.activities = new ArrayList<>();
   }
 
   public UUID getUUID() {
@@ -73,6 +77,10 @@ public final class Student implements Serializable {
 
   public void setCourse(Course course) {
     this.course = course;
+  }
+
+  public void addActivity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
+    this.activities.add(new Activity(workload, start, end, curriculumLink, attached, category));
   }
 
   @Override

@@ -18,13 +18,15 @@ public final class Activity implements Serializable {
 
   private String attached;
 
-  public Complementary() {}
+  private Category category;
 
-  public Complementary(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached) {
-    this(UUID.randomUUID(), workload, start, end, curriculumLink, attached);
+  public Activity() {}
+
+  public Activity(Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
+    this(UUID.randomUUID(), workload, start, end, curriculumLink, attached, category);
   }
 
-  public Complementary(UUID uuid, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached) {
+  public Activity(UUID uuid, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
     if (workload <= 0) {
       throw new IllegalArgumentException("As atividades devem possuir carga horária maior que zero.");
     }
@@ -40,6 +42,8 @@ public final class Activity implements Serializable {
     this.curriculumLink = curriculumLink;
 
     this.attached = attached;
+
+    this.category = category;
   }
 
   public UUID getUUID() {

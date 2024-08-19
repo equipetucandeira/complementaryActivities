@@ -12,19 +12,19 @@ import java.util.Optional;
 public final class ActivityRepository implements Repository<Activity> {
   @Override
   public Activity cast(ResultSet resultSet) throws Exception {
-    var complementaryActivity = new Activity();
+    var activity = new Activity();
 
-    complementaryActivity.setUUID(resultSet.getString("id"));
+    activity.setUUID(resultSet.getString("id"));
 
-    complementaryActivity.setStart(resultSet.getDate("start").toLocalDate());
+    activity.setStart(resultSet.getDate("start").toLocalDate());
 
-    complementaryActivity.setEnd(resultSet.getDate("end").toLocalDate());
+    activity.setEnd(resultSet.getDate("end").toLocalDate());
 
-    complementaryActivity.setCurriculumLink(resultSet.getBoolean("curriculum_link"));
+    activity.setCurriculumLink(resultSet.getBoolean("curriculum_link"));
 
-    complementaryActivity.setAttached(resultSet.getString("attached"));
+    activity.setAttached(resultSet.getString("attached"));
 
-    return complementaryActivity;
+    return activity;
   }
 
   @Override
