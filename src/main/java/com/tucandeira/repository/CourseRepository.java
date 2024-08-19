@@ -2,7 +2,6 @@ package com.tucandeira.repository;
 
 import com.tucandeira.db.Repository;
 import com.tucandeira.domain.Course;
-import com.tucandeira.domain.Workload;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
