@@ -156,53 +156,63 @@ CREATE TABLE Submissions (
   id CHAR(36) PRIMARY KEY,
   category CHAR(36) NOT NULL,
   student CHAR(36) NOT NULL,
+  servant CHAR(36),
   workload TINYINT NOT NULL,
   start DATE NOT NULL,
   end DATE NOT NULL,
-  attached CHAR(60) NOT NULL,
+  attached TEXT NOT NULL,
   active BOOLEAN DEFAULT TRUE,
   submitted_at DATE,
   expires_at DATE,
   analyzed_at DATE,
   approved BOOLEAN,
+  curriculum_link BOOLEAN,
+  state ENUM('WAITING', 'EXPIRED', 'ANALYZED') DEFAULT 'WAITING',
   commentary VARCHAR(60) DEFAULT 'Sem comentários.',
   FOREIGN KEY (category) REFERENCES Categories (id),
-  FOREIGN KEY (student) REFERENCES Users (id)
+  FOREIGN KEY (student) REFERENCES Users (id),
+  FOREIGN KEY (servant) REFERENCES Users (id)
 );
 
 DELIMITER $$
-CREATE PROCEDURE Submit(IN id CHAR(36), IN category CHAR(36), IN student CHAR(36), IN workload TINYINT, IN start DATE, IN end DATE, IN attached CHAR(60))
+CREATE PROCEDURE GetSubmissions(IN student CHAR(36))
 BEGIN
-  INSERT INTO Submissions (id, category, student, workload, attached, start, end, submitted_at, expires_at) VALUES (id, category, student, workload, attached, start, end, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY));
+  SELECT * FROM Submissions WHERE active = TRUE AND Submissions.student = student;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE Submit(IN id CHAR(36), IN category CHAR(36), IN student CHAR(36), IN workload TINYINT, IN start DATE, IN end DATE, IN curriculumn_link BOOLEAN, IN attached TEXT)
+BEGIN
+  INSERT INTO Submissions (id, category, student, workload, curriculum_link, attached, start, end, submitted_at, expires_at) VALUES (id, category, student, workload, curriculum_link, attached, start, end, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY));
 END $$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE Resubmit(IN id CHAR(36))
 BEGIN
-  UPDATE Submissions SET state = 'WAITING', expires_at (CURDATE(), INTERVAL 30 DAY) WHERE active = TRUE AND state = 'EXPIRED' AND Submissions.id = id;
-END
-DELIMITIER ;
+  UPDATE Submissions SET state = 'WAITING', expires_at = DATE_ADD(CURDATE(), INTERVAL 30 DAY) WHERE active = TRUE AND state = 'EXPIRED' AND Submissions.id = id;
+END $$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE Approve(IN id CHAR (36))
 BEGIN
   UPDATE Submissions SET state = 'ANALYZED', analyzed_at = CURDATE(), approved = TRUE WHERE active = TRUE AND state = 'WAITING' AND Submissions.id = id;
-END
-DELIMITIER ;
+END $$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE Reprove(IN id CHAR(36), IN commentary VARCHAR(60))
 BEGIN
-END
-DELIMITIER ;
   UPDATE Submissions SET state = 'ANALYZED', analyzed_at = CURDATE(), Submissions.commentary = commentary, approved = FALSE WHERE active = TRUE AND state = 'WAITING' AND Submissions.id = id;
-DELIMITER $$
+END $$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE GetWaitings()
 BEGIN
-  SELECT id, category, student, workload, start, end,   submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'WAITING';
+  SELECT id, category, student, workload, start, end,  submitted_at, expires_at, attached FROM Submissions WHERE active = TRUE AND state = 'WAITING';
 END $$
 DELIMITER ;
 
