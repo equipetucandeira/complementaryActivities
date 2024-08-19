@@ -127,7 +127,7 @@ public final class Activity implements Serializable {
   }
 
   public void setApproved(boolean approved) {
-    this.approved;
+    this.approved = approved;
   }
 
   public boolean isApproved() {

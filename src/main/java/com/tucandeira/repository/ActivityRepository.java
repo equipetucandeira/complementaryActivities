@@ -2,7 +2,6 @@ package com.tucandeira.repository;
 
 import com.tucandeira.App;
 import com.tucandeira.domain.Activity;
-import com.tucandeira.domain.ActivityStatus;
 import com.tucandeira.db.Repository;
 
 import java.sql.Date;
