@@ -169,11 +169,18 @@ CREATE TABLE Submissions (
   approved BOOLEAN,
   curriculum_link BOOLEAN,
   state ENUM('WAITING', 'EXPIRED', 'ANALYZED') DEFAULT 'WAITING',
-  commentary VARCHAR(60) DEFAULT 'Sem comentários.',
+  commentary VARCHAR(255) DEFAULT 'Sem comentários.',
   FOREIGN KEY (category) REFERENCES Categories (id),
   FOREIGN KEY (student) REFERENCES Users (id),
   FOREIGN KEY (servant) REFERENCES Users (id)
 );
+
+DELIMITER $$
+CREATE PROCEDURE AnalyzeSubmission(IN id CHAR(36), IN servant CHAR(36), IN approved BOOLEAN, IN commentary VARCHAR(255))
+BEGIN
+  UPDATE Submissions SET Submissions.servant = servant, state = 'ANALYZED', Submissions.approved = approved, Submissions.commentary = commentary, analyzed_at = CURDATE() WHERE Submissions.id = id; 
+END $$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE GetSubmissions(IN student CHAR(36))
