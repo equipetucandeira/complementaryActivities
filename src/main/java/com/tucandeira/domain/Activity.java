@@ -28,6 +28,8 @@ public final class Activity implements Serializable {
 
   private boolean approved;
 
+  private String commentary;
+
   public Activity() {}
 
   public Activity(String name, Integer workload, LocalDate start, LocalDate end, boolean curriculumLink, String attached, Category category) {
@@ -132,6 +134,14 @@ public final class Activity implements Serializable {
 
   public void setAttached(String attached) {
     this.attached = attached;
+  }
+
+  public String getCommentary() {
+    return this.commentary;
+  }
+
+  public void setCommentary(String commentary) {
+    this.commentary = commentary;
   }
 
   public String getStatus() {

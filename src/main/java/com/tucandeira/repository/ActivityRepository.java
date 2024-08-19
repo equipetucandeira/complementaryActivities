@@ -35,9 +35,13 @@ public final class ActivityRepository implements Repository<Activity> {
 
     activity.setCurriculumLink(resultSet.getBoolean("curriculum_link"));
 
+    activity.setCommentary(resultSet.getString("commentary"));
+
     activity.setAttached(resultSet.getString("attached"));
 
     activity.setStatus(resultSet.getString("state"));
+
+    activity.setApproved(resultSet.getBoolean("approved"));
 
     var category = new CategoryRepository(this.connection).find(UUID.fromString(resultSet.getString("category")));
 
@@ -119,7 +123,22 @@ public final class ActivityRepository implements Repository<Activity> {
 
   @Override
   public boolean update(Activity activity) {
-    return true;
+    try {
+      var statement = this.connection.prepareCall("{call AnalyzeSubmission(?, ?, ?, ?)}");
+
+      statement.setString(1, activity.getUUID().toString());
+      statement.setString(2, App.getServant().getUUID().toString());
+      statement.setBoolean(3, activity.isApproved());
+      statement.setString(4, activity.getCommentary());
+
+      statement.executeUpdate();
+
+      return true;
+    } catch (Exception exception) {
+      System.out.println(exception.getMessage());
+
+      return false;
+    }
   }
 
   @Override

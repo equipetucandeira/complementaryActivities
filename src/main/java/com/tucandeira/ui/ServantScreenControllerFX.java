@@ -71,11 +71,14 @@ public class ServantScreenControllerFX {
     try {
       var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/detailsScreen.fxml").toURI().toURL());
 
+      loader.getNamespace().put("id", activity.getUUID().toString());
+
       loader.getNamespace().put("name", activity.getName());
 
       loader.getNamespace().put("link", activity.isCurriculumLinked()? "Sim" : "Não");
 
       loader.getNamespace().put("category", activity.getCategory().getName());
+      loader.getNamespace().put("categoryid", activity.getCategory().getID().toString());
 
       loader.getNamespace().put("workload", activity.getWorkload());
 
@@ -111,6 +114,8 @@ var rootItem = new TreeItem<String>("Atividades submetidas");
 
     for (var activity : activities) {
       var item = new TreeItem<String>(activity.getName());
+
+      System.out.println(activity.getName() + " - " + activity.getStatus() + " Approved: " + activity.isApproved());
 
         if (activity.getStatus().equals("WAITING")) {
           needsToAnalyze.getChildren().add(item);

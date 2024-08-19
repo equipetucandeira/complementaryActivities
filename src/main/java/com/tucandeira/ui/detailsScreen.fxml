@@ -12,31 +12,35 @@
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    <Label text="${name}" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
+    <Label fx:id="labelName" text="${name}" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
 
-    <Label text="Vinculação Curricular:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <Label fx:id="labelID" text="${id}" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="2" visible="false"/>
+
+    <Label fx:id="labelCategoryID" text="${categoryid}" visible="false" />
+
+    <Label fx:id="labelLink" text="Vinculação Curricular:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
     <Label text="${link}" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-    <Label text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-    <Label text="${category}" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <Label  text="Categoria:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+    <Label fx:id="labelCategory" text="${category}" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
     <Label text="Carga Horária:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-    <Label text="${workload}" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    <Label fx:id="labelWorkload" text="${workload}" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
 
     <Label text="Data de Início:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-    <Label text="${start}" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    <Label fx:id="labelStart" text="${start}" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
 
     <Label text="Data de Término:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-    <Label text="${end}" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+    <Label fx:id="labelEnd" text="${end}" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
     <Label text="Anexo:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-    <Label text="${attached}" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+    <Label fx:id="labelAttached" text="${attached}" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
 
     <Label text="Adicionar comentário:" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2"/>
-    <TextArea GridPane.columnIndex="0" GridPane.rowIndex="9" GridPane.columnSpan="2">
+    <TextArea fx:id="textCommentary" GridPane.columnIndex="0" GridPane.rowIndex="9" GridPane.columnSpan="2">
     </TextArea>
 
 
