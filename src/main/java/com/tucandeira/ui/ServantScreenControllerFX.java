@@ -22,45 +22,61 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Collection;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.GridPane;
 
 public class ServantScreenControllerFX {
-    @FXML
-    private ListView<String> activitiesListView;
+  private Collection<Activity> activities;
 
-    @FXML
-    private TreeView<String> myTreeView;
+  private HashMap<String, Activity> activityNameMap = new HashMap<>();
+
+  @FXML
+  private ListView<String> activitiesListView;
+
+  @FXML
+  private TreeView<String> myTreeView;
     
-    @FXML
-    private void goToMainMenu(ActionEvent event) {
-      var stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+  @FXML
+  private void goToMainMenu(ActionEvent event) {
+    var stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
       
-      try {
-        var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/menuScreen.fxml").toURI().toURL());
-        Parent root = loader.load();
+    try {
+      var loader = new FXMLLoader(new File("src/main/java/com/tucandeira/ui/menuScreen.fxml").toURI().toURL());
+      
+      Parent root = loader.load();
             
-        var scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-      } catch (IOException e) {
-        e.printStackTrace();
-        Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela do menu principal.");
-        alert.showAndWait();
-      }
+      var scene = new Scene(root);
+      
+      stage.setScene(scene);
+      
+      stage.show();
+    } catch (IOException e) {
+      e.printStackTrace();
+      
+      Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela do menu principal.");
+      
+      alert.showAndWait();
+    }
   }
 
   @FXML
   private void approve(ActionEvent event) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
     alert.setTitle("Tarefa aprovada");
+
     alert.setHeaderText(null);
+
     alert.setContentText("A tarefa foi aprovada com sucesso. As horas já foram contabilizadas!");
+
     alert.showAndWait();
   }
 
@@ -78,6 +94,7 @@ public class ServantScreenControllerFX {
       loader.getNamespace().put("link", activity.isCurriculumLinked()? "Sim" : "Não");
 
       loader.getNamespace().put("category", activity.getCategory().getName());
+
       loader.getNamespace().put("categoryid", activity.getCategory().getID().toString());
 
       loader.getNamespace().put("workload", activity.getWorkload());
@@ -95,54 +112,70 @@ public class ServantScreenControllerFX {
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();
+
       Alert alert = new Alert(Alert.AlertType.ERROR, "Erro ao carregar a tela de detalhes.");
+
       alert.showAndWait();
     }    
   }
 
   @FXML
   private void listTreeActivities(){
-var rootItem = new TreeItem<String>("Atividades submetidas");
-      rootItem.setExpanded(true);
+    var rootItem = new TreeItem<String>("Atividades submetidas");
+    
+    rootItem.setExpanded(true);
     
     var needsToAnalyze = new TreeItem<String>("Atividades em espera");
-    var expired = new TreeItem<String>("Atividades expiradas");
-    var approved = new TreeItem<String>("Atividades aprovadas");
-    var reproved = new TreeItem<String>("Atividades reprovadas");
 
-    var activities = new ActivityRepository(App.getConnection()).listAll();
+    var expired = new TreeItem<String>("Atividades expiradas");
+
+    var approved = new TreeItem<String>("Atividades aprovadas");
+
+    var reproved = new TreeItem<String>("Atividades reprovadas");
 
     for (var activity : activities) {
       var item = new TreeItem<String>(activity.getName());
 
-      System.out.println(activity.getName() + " - " + activity.getStatus() + " Approved: " + activity.isApproved());
-
-        if (activity.getStatus().equals("WAITING")) {
-          needsToAnalyze.getChildren().add(item);
-        } else if (activity.getStatus().equals("EXPIRED")) {
-          expired.getChildren().add(item);
-        } else if (activity.getStatus().equals("ANALYZED")) {
-          if (activity.isApproved()) {
-            approved.getChildren().add(item);
-          } else {
-            reproved.getChildren().add(item);
-          }
-         }
+      if (activity.getStatus().equals("WAITING")) {
+        needsToAnalyze.getChildren().add(item);
+      } else if (activity.getStatus().equals("EXPIRED")) {
+        expired.getChildren().add(item);
+      } else if (activity.getStatus().equals("ANALYZED")) {
+        if (activity.isApproved()) {
+          approved.getChildren().add(item);
+        } else {
+          reproved.getChildren().add(item);
+        }
       }
+    }
 
     rootItem.getChildren().addAll(needsToAnalyze, expired, approved, reproved);
 
     myTreeView.setRoot(rootItem);
 
-    myTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-        if (newValue != null && newValue.isLeaf()) {
-            goToViewDetails((Activity)activities.toArray()[0]); // TODO: trocar pela atividade clicada
-        }
+    myTreeView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+      var item = myTreeView.getSelectionModel().getSelectedItem();
+
+      if (item == null || !item.isLeaf()) {
+        return;
+      }
+
+      if (!activityNameMap.containsKey(item.getValue())) {
+        return;
+      }
+
+      goToViewDetails(activityNameMap.get(item.getValue()));
     });
   }
 
   @FXML
-    public void initialize() {
-      listTreeActivities();
+  public void initialize() {
+    this.activities = new ActivityRepository(App.getConnection()).listAll();
+
+    for (var activity : activities) {
+      activityNameMap.put(activity.getName(), activity);
     }
+
+    listTreeActivities();
+  }
 }
